@@ -62,13 +62,14 @@ alphabet_element = document.getElementById('alphabet');
 var alphabet = get_alphabet();
 generate_buttons();
 
+// Populate DOM with buttons for each letter of the alphababet
 function generate_buttons() {
     for (let i = 0; i < alphabet.length; i++) {
         let btn = document.createElement("button");
         let attr_class = document.createAttribute("class");
         let text = document.createTextNode(alphabet[i]);
         attr_class.value="btn btn-danger";
-        
+
         btn.setAttributeNode(attr_class);
         btn.appendChild(text);
         alphabet_element.appendChild(btn);

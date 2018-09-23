@@ -77,7 +77,7 @@ var Model = function() {
             correct: false
         },
         {
-            letter: 'b',
+            letter: 'p',
             selected: false,
             correct: false
         },
@@ -188,6 +188,8 @@ Model.prototype = {
         this.alphabet[letter_index]['correct'] = true;
 
         console.log(this.alphabet[letter_index]);
-        this.guess_letter_event.notify();
+        this.guess_letter_event.notify({
+            letter: letter
+        });
     }
 }

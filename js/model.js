@@ -1,5 +1,8 @@
 var Model = function() {
     this.guess_letter_event = new Event(this);
+    this.set_word_event = new Event(this);
+    this.game_over_event = new Event(this);
+    this.decrement_score_event = new Event(this);
     this.alphabet = [
         {
             letter: 'a',
@@ -173,23 +176,46 @@ var Model = function() {
             word: "ecstatic",
             definition: "Feeling or expressing overwhelming happiness or joyful excitement"
         }
-    ],
-    this.current_word = ''
+    ];
+    this.current_word = '';
+    this.score = 7;
+    this.game_over = false;
 }
 
 
 Model.prototype = {
+
     get_alphabet: function() {
         return this.alphabet;
     },
-    guess_letter: function(letter) {
+    get_score: function() {
+        return this.score;
+    },
+    decrement_score: function() {
+        this.score--;
+        this.decrement_score_event.notify({
+            score: this.score
+        });
+    },
+    guess_letter: function(letter, correct) {
         let letter_index = letter.charCodeAt(0) - lexicographic_offset;
         this.alphabet[letter_index]['selected'] = true;
-        this.alphabet[letter_index]['correct'] = true;
-
-        console.log(this.alphabet[letter_index]);
+        if (correct === true) {
+            this.alphabet[letter_index]['correct'] = true;
+        } 
         this.guess_letter_event.notify({
             letter: letter
         });
-    }
+    },
+    set_word: function(index) {
+        this.current_word = this.words[index]['word'];
+        console.log(this.current_word);
+        this.set_word_event.notify({
+
+        });
+    },
+    set_game_over: function() {
+        this.game_over = true;
+        this.game_over_event.notify();
+    },
 }

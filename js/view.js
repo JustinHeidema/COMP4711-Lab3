@@ -10,14 +10,23 @@ var View = function(model) {
 
 View.prototype = {
 
+    // Setup Handlers
     setup_handlers: function() {
         this.guess_letter_handler = this.guess_letter.bind(this);
         this.determine_btn_color_handler = this.determine_btn_color.bind(this);
+        this.set_word_handler = this.set_word.bind(this);
+        this.game_over_handler = this.game_over.bind(this);
+        this.decrement_score_handler = this.decrement_score.bind(this);
     },
 
+    // Add listeners
     enable: function() {
         this.model.guess_letter_event.add_listener(this.guess_letter_handler);
+        this.model.set_word_event.add_listener(this.set_word_handler);
+        this.model.game_over_event.add_listener(this.game_over_handler);
+        this.model.decrement_score_event.add_listener(this.decrement_score_handler);
     },
+
     // Determines which color of button should be displayed
     determine_btn_color: function(letter) {
         let btn_class = '';
@@ -49,6 +58,7 @@ View.prototype = {
         return letter_correct;
     },
 
+    // Initial render of the page
     render: function() {
         alphabet_element = document.getElementById('alphabet');
         let alphabet = this.model.get_alphabet();
@@ -70,14 +80,22 @@ View.prototype = {
         }
     },
 
+    // Updates the page based on the guessed letter
     guess_letter: function(sender, args) {
         let btn = document.getElementById(args.letter);
         let attr_class = document.createAttribute("class");
         attr_class.value = this.determine_btn_color(args.letter);
+        btn.setAttribute('onclick', '');
 
         btn.setAttributeNode(attr_class);
     },
 
+    set_word: function(sender, args) {
+        // let num_letters_in_word = args.current_word.length;
+        console.log("Hello World");
+    },
+
+    // Returns a bounded onclick function for a button
     return_btn_onclick_handler: function(letter) {
         var temp = letter;
         function x() {
@@ -87,5 +105,13 @@ View.prototype = {
         }
 
         return x.bind(this);
+    },
+    game_over: function() {
+        document.getElementById('replay_button');
+
+        console.log("GAME OVER FROM VIEW");
+    },
+    decrement_score: function(args) {
+        console.log(args.score);
     }
 }

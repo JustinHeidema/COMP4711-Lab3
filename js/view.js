@@ -1,102 +1,86 @@
-/*===================
-    Model
-===================*/
-// An array of letters to be used for the board game
-var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+const lexicographic_offset = 97;
 
-// An array of word objects.  Each object contains the word and it's definition
-var words = [
-    {
-        word: "octopus",
-        definition: "An eight legged ocean creature"
+var View = function(model) {
+    this.model = model;
+    this.guess_letter_event = new Event(this);
+
+    this.setup_handlers();
+    this.enable();
+}
+
+View.prototype = {
+
+    setup_handlers: function() {
+        this.guess_letter_handler = this.guess_letter.bind(this);
     },
-    {
-        word: "renaissance",
-        definition: "The revival of European art and literature under the influence of classical models in the 14th–16th centuries."
+
+    enable: function() {
+        this.model.guess_letter_event.add_listener(this.guess_letter);
     },
-    {
-        word: "pioneer",
-        definition: "A person who is among the first to explore or settle a new country or area"
+
+    render: function() {
+        alphabet_element = document.getElementById('alphabet');
+        let alphabet = this.model.get_alphabet();
+
+        for (let i = 0; i < alphabet.length; i++) {
+            let btn = document.createElement("button");
+            let attr_class = document.createAttribute("class");
+            let current_letter = alphabet[i]['letter'];
+
+            let text = document.createTextNode(current_letter);
+
+            attr_class.value = this.determine_btn_color(current_letter);
+            btn.setAttributeNode(attr_class);
+            btn.appendChild(text);
+
+            btn.onclick = this.return_btn_onclick_handler(current_letter);
+            alphabet_element.appendChild(btn);
+        }
     },
-    {
-        word: "placable",
-        definition: "Easily calmed; gentle and forgiving"
+
+    // Determines which color of button should be displayed
+    determine_btn_color: function(letter) {
+        let btn_class = '';
+        if (!this.letter_guessed(letter)) {
+            btn_class = 'btn btn-info';
+        } else if (this.letter_correct(letter)) {
+            btn_class = 'btn btn-success';
+        } else {
+            btn_class = 'btn btn-danger';
+        }
+        return btn_class;
     },
-    {
-        word: "posit",
-        definition: "Put forward as fact or as a basis for argument."
+
+    // Determines if the letter has been guessed
+    letter_guessed: function(letter) {
+        let alphabet = this.model.get_alphabet();
+        let letter_index = letter.charCodeAt(0) - lexicographic_offset;
+        let letter_selected = alphabet[letter_index]['selected'];
+
+        return letter_selected;
     },
-    {
-        word: "qualm",
-        definition: "An uneasy feeling of doubt, worry, or fear, especially about one's own conduct; a misgiving"
+
+    // Determines if the letter was a correct letter
+    letter_correct: function(letter) {
+        let alphabet = this.model.get_alphabet();
+        let letter_index = letter.charCodeAt(0) - lexicographic_offset;
+        let letter_correct = alphabet[letter_index]['correct'];
+
+        return letter_correct;
     },
-    {
-        word: "chivalrous",
-        definition: "courteous and gallant, especially towards women"
+
+    guess_letter: function() {
+        console.log('Letter Guessed');
     },
-    {
-        word: "awesome",
-        definition: "Extremely impressive or daunting; inspiring awe"
-    },
-    {
-        word: "unabated",
-        definition: "Without any reduction in intensity or strength"
-    },
-    {
-        word: "ecstatic",
-        definition: "Feeling or expressing overwhelming happiness or joyful excitement"
+
+    return_btn_onclick_handler: function(letter) {
+        var temp = letter;
+        function x() {
+            this.guess_letter_event.notify({
+                letter: temp
+            })
+        }
+
+        return x.bind(this);
     }
-];
-
-// The current word to be guessed
-var current_word = '';
-
-/*===================
-    View
-===================*/
-
-// Word to be guessed
-word_element = document.getElementById('word');
-alphabet_element = document.getElementById('alphabet');
-
-var alphabet = get_alphabet();
-generate_buttons();
-
-// Populate DOM with buttons for each letter of the alphababet
-function generate_buttons() {
-    for (let i = 0; i < alphabet.length; i++) {
-        let btn = document.createElement("button");
-        let attr_class = document.createAttribute("class");
-        let text = document.createTextNode(alphabet[i]);
-        attr_class.value="btn btn-danger";
-
-        btn.setAttributeNode(attr_class);
-        btn.appendChild(text);
-        alphabet_element.appendChild(btn);
-    }
 }
-
-word_element.textContent = select_word();
-
-/*===================
-    Controller
-===================*/
-
-// Selects a word at random from eligible words for the game
-function select_word() {
-    let index = Math.floor(Math.random() * 10);
-    current_word = words[index].word;
-    return words[index].word;
-}
-
-// Returns the letters to be used in the game
-function get_alphabet() {
-    return alphabet;
-}
-
-// Returns the eligible words to be used in the game
-function get_words() {
-    return words;
-}
-
-

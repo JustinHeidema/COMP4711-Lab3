@@ -1,16 +1,24 @@
-// Selects a word at random from eligible words for the game
-function select_word() {
-    let index = Math.floor(Math.random() * 10);
-    current_word = words[index].word;
-    return words[index].word;
+var Controller = function(model, view) {
+    this.model = model;
+    this.view = view;
+
+    this.setup_handlers();
+    this.enable();
 }
 
-// Returns the letters to be used in the game
-function get_alphabet() {
-    return alphabet;
+Controller.prototype = {
+
+    setup_handlers: function() {
+        this.guess_letter_handler = this.guess_letter.bind(this);
+    },
+
+    enable: function() {
+        this.view.guess_letter_event.add_listener(this.guess_letter_handler);
+        return this;
+    },
+
+    guess_letter: function(sender, args) {
+        this.model.guess_letter(args.letter);
+    }
 }
 
-// Returns the eligible words to be used in the game
-function get_words() {
-    return words;
-}

@@ -65,6 +65,8 @@ View.prototype = {
 
         for (let i = 0; i < alphabet.length; i++) {
             let btn = document.createElement("button");
+            let guesses_remaining_element = document.getElementById("guesses_remaining");
+
             let attr_class = document.createAttribute("class");
             let current_letter = alphabet[i]['letter'];
 
@@ -75,6 +77,7 @@ View.prototype = {
             btn.setAttribute("id", current_letter);
             btn.appendChild(text);
 
+            guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_score();
             btn.onclick = this.return_btn_onclick_handler(current_letter);
             alphabet_element.appendChild(btn);
         }
@@ -113,5 +116,7 @@ View.prototype = {
     },
     decrement_score: function(args) {
         console.log(args.score);
+        let guesses_remaining_element = document.getElementById("guesses_remaining");
+        guesses_remaining_element.textContent = "Guesses Remaining: " + args.score;
     }
 }

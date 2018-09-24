@@ -218,4 +218,7 @@ Model.prototype = {
         this.game_over = true;
         this.game_over_event.notify();
     },
+    get_score: function() {
+        return this.score;
+    }
 }

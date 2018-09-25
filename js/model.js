@@ -178,6 +178,7 @@ var Model = function() {
         }
     ];
     this.current_word = '';
+    this.current_word_display = '';
     this.score = 7;
     this.game_over = false;
 }
@@ -210,9 +211,17 @@ Model.prototype = {
     set_word: function(index) {
         this.current_word = this.words[index]['word'];
         console.log(this.current_word);
+        this.set_word_display(this.current_word);
         this.set_word_event.notify({
 
         });
+    },
+    set_word_display: function(current_word) {
+        for (let i = 0; i < current_word.length; i++) {
+            this.current_word_display += "_ ";
+        }
+        console.log("set_word_display");
+        console.log(this.current_word_display);
     },
     set_game_over: function() {
         this.game_over = true;
@@ -220,5 +229,11 @@ Model.prototype = {
     },
     get_score: function() {
         return this.score;
+    },
+    get_current_word: function() {
+        return this.current_word;
+    },
+    get_current_word_display: function() {
+        return this.current_word_display;
     }
 }

@@ -14,11 +14,13 @@ Controller.prototype = {
     // Setup Handlers
     setup_handlers: function() {
         this.guess_letter_handler = this.guess_letter.bind(this);
+        this.replay_handler = this.replay.bind(this);
     },
 
     // Add Listeners
     enable: function() {
         this.view.guess_letter_event.add_listener(this.guess_letter_handler);
+        this.view.replay_event.add_listener(this.replay_handler);
         return this;
     },
 
@@ -26,6 +28,10 @@ Controller.prototype = {
     set_word: function() {
         let word_index = Math.floor((Math.random() * num_words));
         this.model.set_word(word_index);
+    },
+    replay: function() {
+        console.log("Controller replay");
+        this.set_word();
     },
 
     // Updates the model with the guessed letter
@@ -57,7 +63,6 @@ Controller.prototype = {
         let game_over = (score === 0);
         return game_over;
     }
-
 
 }
 

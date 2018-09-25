@@ -3,6 +3,7 @@ const lexicographic_offset = 97;
 var View = function(model) {
     this.model = model;
     this.guess_letter_event = new Event(this);
+    this.replay_event = new Event(this);
 
     this.setup_handlers();
     this.enable();
@@ -60,7 +61,7 @@ View.prototype = {
 
     // Initial render of the page
     render: function() {
-        alphabet_element = document.getElementById('alphabet');
+        let alphabet_element = document.getElementById('alphabet');
         let alphabet = this.model.get_alphabet();
 
         for (let i = 0; i < alphabet.length; i++) {
@@ -80,6 +81,7 @@ View.prototype = {
             guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_score();
             btn.onclick = this.return_btn_onclick_handler(current_letter);
             alphabet_element.appendChild(btn);
+            this.generate_letter_spaces();
         }
     },
 
@@ -110,13 +112,30 @@ View.prototype = {
         return x.bind(this);
     },
     game_over: function() {
-        document.getElementById('replay_button');
+        let replay_button_element = document.getElementById('replay_button_div');
+        let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
+        
+        for (let i = 0; i < alphabet_buttons.length; i++) {
+            alphabet_buttons[i].setAttribute('onclick', '');
+        }
 
+        let btn = document.createElement("button");
+        btn.setAttribute("class", "btn btn-success");
+        btn.setAttribute("id", "replay_button");
+        btn.onclick = this.replay_event.notify();
+        replay_button_element.appendChild(btn);
+        btn.textContent = "Play Again";
         console.log("GAME OVER FROM VIEW");
     },
     decrement_score: function(args) {
         console.log(args.score);
         let guesses_remaining_element = document.getElementById("guesses_remaining");
         guesses_remaining_element.textContent = "Guesses Remaining: " + args.score;
+    },
+    generate_letter_spaces: function() {
+        let current_word_display = this.model.get_current_word_display();
+        let letter_placeholders_element = document.getElementById("letter_placeholders");
+
+        letter_placeholders_element.textContent = this.model.get_current_word_display();
     }
 }

@@ -11,7 +11,11 @@
     margin-top: 20%;
 }
 
-.btn {
+button:not(#replay_button){
     width: 40px;
     margin: 1px;
+}
+
+#replay_button_div {
+    text-align: center;
 }

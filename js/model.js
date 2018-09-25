@@ -2,7 +2,8 @@ var Model = function() {
     this.guess_letter_event = new Event(this);
     this.set_word_event = new Event(this);
     this.game_over_event = new Event(this);
-    this.decrement_score_event = new Event(this);
+    this.set_score_event = new Event(this);
+    this.replay_event = new Event(this);
     this.alphabet = [
         {
             letter: 'a',
@@ -192,12 +193,6 @@ Model.prototype = {
     get_score: function() {
         return this.score;
     },
-    decrement_score: function() {
-        this.score--;
-        this.decrement_score_event.notify({
-            score: this.score
-        });
-    },
     guess_letter: function(letter, correct) {
         let letter_index = letter.charCodeAt(0) - lexicographic_offset;
         this.alphabet[letter_index]['selected'] = true;
@@ -227,6 +222,13 @@ Model.prototype = {
         this.game_over = true;
         this.game_over_event.notify();
     },
+    set_score: function(new_score) {
+        console.log(new_score);
+        this.score = new_score;
+        this.set_score_event.notify({
+            score: this.score
+        });
+    },
     get_score: function() {
         return this.score;
     },
@@ -235,5 +237,18 @@ Model.prototype = {
     },
     get_current_word_display: function() {
         return this.current_word_display;
-    }
+    },
+    replay: function() {
+        this.reset_alphabet();
+        this.set_word_display(this.current_word);
+        this.set_score(7);
+        this.replay_event.notify();
+    },
+    reset_alphabet: function() {
+        this.alphabet.forEach(element => {
+            element['selected'] = false;
+            element['correct'] = false;
+            console.log(element);
+        });
+    },
 }

@@ -30,15 +30,17 @@ Controller.prototype = {
         this.model.set_word(word_index);
     },
     replay: function() {
-        console.log("Controller replay");
         this.set_word();
+        this.model.replay();
     },
 
     // Updates the model with the guessed letter
     guess_letter: function(sender, args) {
         let letter_in_word = this.letter_in_word(args.letter);
+        let current_score = this.model.get_score();
         if (!letter_in_word) {
-            this.model.decrement_score();
+            let new_score = current_score - 1;
+            this.model.set_score(new_score);
         }
         this.model.guess_letter(args.letter, letter_in_word);
         let game_over = this.game_over();

@@ -18,6 +18,9 @@ View.prototype = {
         this.set_word_handler = this.set_word.bind(this);
         this.game_over_handler = this.game_over.bind(this);
         this.decrement_score_handler = this.decrement_score.bind(this);
+        this.replay_button_handler = this.replay_button.bind(this);
+        this.replay_handler = this.replay.bind(this);
+        console.log(this.replay_handler);
     },
 
     // Add listeners
@@ -25,7 +28,8 @@ View.prototype = {
         this.model.guess_letter_event.add_listener(this.guess_letter_handler);
         this.model.set_word_event.add_listener(this.set_word_handler);
         this.model.game_over_event.add_listener(this.game_over_handler);
-        this.model.decrement_score_event.add_listener(this.decrement_score_handler);
+        this.model.set_score_event.add_listener(this.decrement_score_handler);
+        this.model.replay_event.add_listener(this.replay_handler);
     },
 
     // Determines which color of button should be displayed
@@ -57,6 +61,11 @@ View.prototype = {
         let letter_correct = alphabet[letter_index]['correct'];
 
         return letter_correct;
+    },
+    decrement_score: function(args) {
+        console.log(args.score);
+        let guesses_remaining_element = document.getElementById("guesses_remaining");
+        guesses_remaining_element.textContent = "Guesses Remaining: " + args.score;
     },
 
     // Initial render of the page
@@ -122,16 +131,34 @@ View.prototype = {
         let btn = document.createElement("button");
         btn.setAttribute("class", "btn btn-success");
         btn.setAttribute("id", "replay_button");
-        btn.onclick = this.replay_event.notify();
+
+        btn.onclick = this.replay_button_handler;
+
         replay_button_element.appendChild(btn);
         btn.textContent = "Play Again";
         console.log("GAME OVER FROM VIEW");
     },
-    decrement_score: function(args) {
-        console.log(args.score);
-        let guesses_remaining_element = document.getElementById("guesses_remaining");
-        guesses_remaining_element.textContent = "Guesses Remaining: " + args.score;
+
+    replay_button: function() {
+        this.replay_event.notify();
     },
+
+
+    replay: function() {
+        let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
+        let replay_button_element = document.getElementById('replay_button_div');
+
+        replay_button_element.textContent = '';
+
+        for (let i = 0; i < alphabet_buttons.length; i++) {
+            let current_letter = String.fromCharCode(i + lexicographic_offset);
+            console.log(current_letter);
+            let btn_color = this.determine_btn_color(current_letter);
+            alphabet_buttons[i].onclick = this.return_btn_onclick_handler(current_letter);
+            alphabet_buttons[i].setAttribute('class', btn_color);
+        }
+    },
+
     generate_letter_spaces: function() {
         let current_word_display = this.model.get_current_word_display();
         let letter_placeholders_element = document.getElementById("letter_placeholders");

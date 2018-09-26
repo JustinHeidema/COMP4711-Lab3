@@ -4,6 +4,8 @@ var Model = function() {
     this.game_over_event = new Event(this);
     this.set_score_event = new Event(this);
     this.replay_event = new Event(this);
+    this.set_word_display_event = new Event(this);
+    this.modify_word_display_event = new Event(this);
     this.alphabet = [
         {
             letter: 'a',
@@ -180,6 +182,7 @@ var Model = function() {
     ];
     this.current_word = '';
     this.current_word_display = '';
+    this.current_word_display_l = []
     this.score = 7;
     this.game_over = false;
 }
@@ -212,10 +215,14 @@ Model.prototype = {
         });
     },
     set_word_display: function(current_word) {
+        this.current_word_display_l = [];
         for (let i = 0; i < current_word.length; i++) {
-            this.current_word_display += "_ ";
+            this.current_word_display_l.push("_");
+            console.log(this.current_word_display_l);
+
         }
         console.log("set_word_display");
+        this.set_word_display_event.notify();
         console.log(this.current_word_display);
     },
     set_game_over: function() {
@@ -236,7 +243,7 @@ Model.prototype = {
         return this.current_word;
     },
     get_current_word_display: function() {
-        return this.current_word_display;
+        return this.current_word_display_l;
     },
     replay: function() {
         this.reset_alphabet();
@@ -251,4 +258,14 @@ Model.prototype = {
             console.log(element);
         });
     },
+    modify_word_display: function(letter, letter_indexes) {
+        for (let i = 0; i < letter_indexes.length; i++) {
+            let index = letter_indexes[i];
+            console.log(index);
+            this.current_word_display_l[letter_indexes[i]] = letter;
+        }
+        console.log("model current_word_display");
+        console.log(this.current_word_display_l);
+        this.modify_word_display_event.notify();
+    }
 }

@@ -20,6 +20,7 @@ View.prototype = {
         this.decrement_score_handler = this.decrement_score.bind(this);
         this.replay_button_handler = this.replay_button.bind(this);
         this.replay_handler = this.replay.bind(this);
+        this.generate_letter_spaces_handler = this.generate_letter_spaces.bind(this);
         console.log(this.replay_handler);
     },
 
@@ -30,6 +31,8 @@ View.prototype = {
         this.model.game_over_event.add_listener(this.game_over_handler);
         this.model.set_score_event.add_listener(this.decrement_score_handler);
         this.model.replay_event.add_listener(this.replay_handler);
+        this.model.set_word_display_event.add_listener(this.generate_letter_spaces_handler);
+        this.model.modify_word_display_event.add_listener(this.generate_letter_spaces_handler);
     },
 
     // Determines which color of button should be displayed
@@ -90,7 +93,6 @@ View.prototype = {
             guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_score();
             btn.onclick = this.return_btn_onclick_handler(current_letter);
             alphabet_element.appendChild(btn);
-            this.generate_letter_spaces();
         }
     },
 
@@ -148,6 +150,7 @@ View.prototype = {
         let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
         let replay_button_element = document.getElementById('replay_button_div');
 
+
         replay_button_element.textContent = '';
 
         for (let i = 0; i < alphabet_buttons.length; i++) {
@@ -162,7 +165,10 @@ View.prototype = {
     generate_letter_spaces: function() {
         let current_word_display = this.model.get_current_word_display();
         let letter_placeholders_element = document.getElementById("letter_placeholders");
+        letter_placeholders_element.textContent = '';
 
-        letter_placeholders_element.textContent = this.model.get_current_word_display();
+        for (let i = 0; i < current_word_display.length; i++) {
+            letter_placeholders_element.textContent += current_word_display[i] + " ";
+        }   
     }
 }

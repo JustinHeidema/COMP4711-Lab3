@@ -122,7 +122,8 @@ View.prototype = {
 
         return x.bind(this);
     },
-    game_over: function() {
+    game_over: function(args) {
+        console.log(args.victory_message);
         let replay_button_element = document.getElementById('replay_button_div');
         let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
         

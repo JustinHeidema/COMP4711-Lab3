@@ -185,6 +185,7 @@ var Model = function() {
     this.current_word_display_l = []
     this.score = 7;
     this.game_over = false;
+    this.victory_message = '';
 }
 
 
@@ -225,9 +226,17 @@ Model.prototype = {
         this.set_word_display_event.notify();
         console.log(this.current_word_display);
     },
-    set_game_over: function() {
+    set_game_over: function(win_condition_met) {
+        console.log("model: " + win_condition_met);
+        if (win_condition_met) {
+            this.set_victory_message("VICTORY");
+        } else {
+            this.set_victory_message("DEFEAT");
+        }  
         this.game_over = true;
-        this.game_over_event.notify();
+        this.game_over_event.notify({
+            victory_message: this.victory_message
+        });
     },
     set_score: function(new_score) {
         console.log(new_score);
@@ -244,6 +253,9 @@ Model.prototype = {
     },
     get_current_word_display: function() {
         return this.current_word_display_l;
+    },
+    get_victory_message: function() {
+        return this.victory_message;
     },
     replay: function() {
         this.reset_alphabet();
@@ -267,5 +279,8 @@ Model.prototype = {
         console.log("model current_word_display");
         console.log(this.current_word_display_l);
         this.modify_word_display_event.notify();
+    },
+    set_victory_message: function(message) {
+        this.victory_message = message;
     }
 }

@@ -21,6 +21,7 @@ View.prototype = {
         this.replay_button_handler = this.replay_button.bind(this);
         this.replay_handler = this.replay.bind(this);
         this.generate_letter_spaces_handler = this.generate_letter_spaces.bind(this);
+        this.generate_definition_handler = this.generate_definition.bind(this);
         console.log(this.replay_handler);
     },
 
@@ -32,6 +33,7 @@ View.prototype = {
         this.model.set_score_event.add_listener(this.decrement_score_handler);
         this.model.replay_event.add_listener(this.replay_handler);
         this.model.set_word_display_event.add_listener(this.generate_letter_spaces_handler);
+        this.model.set_word_display_event.add_listener(this.generate_definition_handler);
         this.model.modify_word_display_event.add_listener(this.generate_letter_spaces_handler);
     },
 
@@ -126,7 +128,9 @@ View.prototype = {
         console.log(args.victory_message);
         let replay_button_element = document.getElementById('replay_button_div');
         let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
-        
+        let victory_message_element = document.getElementById("victory_message");
+
+
         for (let i = 0; i < alphabet_buttons.length; i++) {
             alphabet_buttons[i].setAttribute('onclick', '');
         }
@@ -139,6 +143,8 @@ View.prototype = {
 
         replay_button_element.appendChild(btn);
         btn.textContent = "Play Again";
+        victory_message_element.textContent = args.victory_message;
+        
         console.log("GAME OVER FROM VIEW");
     },
 
@@ -150,8 +156,9 @@ View.prototype = {
     replay: function() {
         let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
         let replay_button_element = document.getElementById('replay_button_div');
+        let victory_message_element = document.getElementById('victory_message');
 
-
+        victory_message_element.textContent = '';
         replay_button_element.textContent = '';
 
         for (let i = 0; i < alphabet_buttons.length; i++) {
@@ -171,5 +178,10 @@ View.prototype = {
         for (let i = 0; i < current_word_display.length; i++) {
             letter_placeholders_element.textContent += current_word_display[i] + " ";
         }   
+    },
+    generate_definition: function() {
+        let definition_element = document.getElementById("definition");
+        console.log(this.model.get_current_definition());
+        definition_element.textContent = this.model.get_current_definition();
     }
 }

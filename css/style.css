@@ -1,14 +1,12 @@
-#alphabet {
+/* #alphabet {
     position: absolute;
     display: inline-block;
     text-align: center;
-    bottom: 50;
     width: 100%;
-}
+} */
 
 #word {
     text-align: center;
-    margin-top: 20%;
 }
 
 button:not(#replay_button){
@@ -18,4 +16,9 @@ button:not(#replay_button){
 
 #replay_button_div {
     text-align: center;
+}
+
+#game_container {
+    text-align: center;
+    background-color: #F5F5DC;
 }

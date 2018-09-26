@@ -186,6 +186,7 @@ var Model = function() {
     this.score = 7;
     this.game_over = false;
     this.victory_message = '';
+    this.current_definition = '';
 }
 
 
@@ -196,6 +197,11 @@ Model.prototype = {
     },
     get_score: function() {
         return this.score;
+    },
+    get_current_definition: function() {
+        console.log("get_current_definition");
+        console.log(this.current_definition);
+        return this.current_definition;
     },
     guess_letter: function(letter, correct) {
         let letter_index = letter.charCodeAt(0) - lexicographic_offset;
@@ -209,7 +215,8 @@ Model.prototype = {
     },
     set_word: function(index) {
         this.current_word = this.words[index]['word'];
-        console.log(this.current_word);
+        this.current_definition = this.words[index]['definition'];
+
         this.set_word_display(this.current_word);
         this.set_word_event.notify({
 
@@ -261,6 +268,7 @@ Model.prototype = {
         this.reset_alphabet();
         this.set_word_display(this.current_word);
         this.set_score(7);
+        this.set_victory_message('');
         this.replay_event.notify();
     },
     reset_alphabet: function() {
@@ -276,8 +284,6 @@ Model.prototype = {
             console.log(index);
             this.current_word_display_l[letter_indexes[i]] = letter;
         }
-        console.log("model current_word_display");
-        console.log(this.current_word_display_l);
         this.modify_word_display_event.notify();
     },
     set_victory_message: function(message) {

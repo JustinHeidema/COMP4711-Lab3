@@ -29,6 +29,8 @@ Controller.prototype = {
         let word_index = Math.floor((Math.random() * num_words));
         this.model.set_word(word_index);
     },
+
+    // Notifies the model to setup data for a new game
     replay: function() {
         this.set_word();
         this.model.replay();
@@ -39,11 +41,9 @@ Controller.prototype = {
         let letter_indexes = []
         for (let i = 0; i < current_word.length; i++) {
             if (letter == current_word.charAt(i)) {
-                console.log("pushing: " + i);
                 letter_indexes.push(i);
             }
         }
-        console.log(letter_indexes);
         this.model.modify_word_display(letter, letter_indexes); 
     },
 
@@ -60,12 +60,17 @@ Controller.prototype = {
     // Updates the model with the guessed letter
     guess_letter: function(sender, args) {
         let letter_in_word = this.letter_in_word(args.letter);
-        let current_score = this.model.get_score();
+        let guesses_remaining = this.model.get_guesses_remaining();
+        let score = this.model.get_score();
         if (letter_in_word) {
             this.modify_word_display(args.letter);
-        } 
-        let new_score = current_score - 1;
-        this.model.set_score(new_score);
+            score++;
+        }  else {
+            score--;
+        }
+        guesses_remaining--;
+        this.model.set_score(score);
+        this.model.set_guesses_remaining(guesses_remaining);
         this.model.guess_letter(args.letter, letter_in_word);
         
         let game_over = this.game_over();
@@ -77,10 +82,9 @@ Controller.prototype = {
 
     // Determines if the game is over
     game_over: function() {
-        console.log("game_over");
         let win_condition_met = this.check_word_display_for_win();
-        let score = this.model.get_score();
-        let game_over = (score === 0);
+        let guesses_remaining = this.model.get_guesses_remaining();
+        let game_over = (guesses_remaining === 0);
 
         if (win_condition_met) {
             game_over = true;

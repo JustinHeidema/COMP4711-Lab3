@@ -6,6 +6,7 @@ var Model = function() {
     this.replay_event = new Event(this);
     this.set_word_display_event = new Event(this);
     this.modify_word_display_event = new Event(this);
+    this.guesses_remaining_event = new Event(this);
     this.alphabet = [
         {
             letter: 'a',
@@ -183,7 +184,8 @@ var Model = function() {
     this.current_word = '';
     this.current_word_display = '';
     this.current_word_display_l = []
-    this.score = 7;
+    this.guesses_remaining = 7;
+    this.score = 0;
     this.game_over = false;
     this.victory_message = '';
     this.current_definition = '';
@@ -192,17 +194,8 @@ var Model = function() {
 
 Model.prototype = {
 
-    get_alphabet: function() {
-        return this.alphabet;
-    },
-    get_score: function() {
-        return this.score;
-    },
-    get_current_definition: function() {
-        console.log("get_current_definition");
-        console.log(this.current_definition);
-        return this.current_definition;
-    },
+    // Updates the state of the letter that was just guessed
+    // with whether it was correct or not
     guess_letter: function(letter, correct) {
         let letter_index = letter.charCodeAt(0) - lexicographic_offset;
         this.alphabet[letter_index]['selected'] = true;
@@ -213,6 +206,8 @@ Model.prototype = {
             letter: letter
         });
     },
+
+    // Sets the word to be guessed for the round
     set_word: function(index) {
         this.current_word = this.words[index]['word'];
         this.current_definition = this.words[index]['definition'];
@@ -222,19 +217,21 @@ Model.prototype = {
 
         });
     },
+
+    // Resets the word display so it shows that
+    // no letters have been chosen
     set_word_display: function(current_word) {
         this.current_word_display_l = [];
         for (let i = 0; i < current_word.length; i++) {
             this.current_word_display_l.push("_");
-            console.log(this.current_word_display_l);
 
         }
-        console.log("set_word_display");
         this.set_word_display_event.notify();
-        console.log(this.current_word_display);
     },
+
+    // Sets game_over, and notifies view with appropriate
+    // victory message
     set_game_over: function(win_condition_met) {
-        console.log("model: " + win_condition_met);
         if (win_condition_met) {
             this.set_victory_message("VICTORY");
         } else {
@@ -245,12 +242,64 @@ Model.prototype = {
             victory_message: this.victory_message
         });
     },
+
+    // Sets guesses_remaining, and notifies the view of update
+    set_guesses_remaining: function(guesses_remaining) {
+        this.guesses_remaining = guesses_remaining;
+        this.guesses_remaining_event.notify({
+            guesses_remaining: this.guesses_remaining
+        });
+    },
+
+    // Sets score, and notifies the view of update
     set_score: function(new_score) {
-        console.log(new_score);
         this.score = new_score;
         this.set_score_event.notify({
             score: this.score
         });
+    },
+
+    // Resets data for a new game, and notifies the view of update
+    replay: function() {
+        this.reset_alphabet();
+        this.set_word_display(this.current_word);
+        this.set_score(0);
+        this.set_guesses_remaining(7);
+        this.set_victory_message('');
+        this.replay_event.notify();
+    },
+
+    // Resets the state for each letter in the alphabet
+    reset_alphabet: function() {
+        this.alphabet.forEach(element => {
+            element['selected'] = false;
+            element['correct'] = false;
+        });
+    },
+
+    // Modifies the appropriate blank spaces in the word
+    // display with the letter guessed and notifies the view
+    modify_word_display: function(letter, letter_indexes) {
+        for (let i = 0; i < letter_indexes.length; i++) {
+            let index = letter_indexes[i];
+            this.current_word_display_l[letter_indexes[i]] = letter;
+        }
+        this.modify_word_display_event.notify();
+    },
+    set_victory_message: function(message) {
+        this.victory_message = message;
+    },
+    get_guesses_remaining: function() {
+        return this.guesses_remaining;
+    },
+    get_alphabet: function() {
+        return this.alphabet;
+    },
+    get_score: function() {
+        return this.score;
+    },
+    get_current_definition: function() {
+        return this.current_definition;
     },
     get_score: function() {
         return this.score;
@@ -264,29 +313,4 @@ Model.prototype = {
     get_victory_message: function() {
         return this.victory_message;
     },
-    replay: function() {
-        this.reset_alphabet();
-        this.set_word_display(this.current_word);
-        this.set_score(7);
-        this.set_victory_message('');
-        this.replay_event.notify();
-    },
-    reset_alphabet: function() {
-        this.alphabet.forEach(element => {
-            element['selected'] = false;
-            element['correct'] = false;
-            console.log(element);
-        });
-    },
-    modify_word_display: function(letter, letter_indexes) {
-        for (let i = 0; i < letter_indexes.length; i++) {
-            let index = letter_indexes[i];
-            console.log(index);
-            this.current_word_display_l[letter_indexes[i]] = letter;
-        }
-        this.modify_word_display_event.notify();
-    },
-    set_victory_message: function(message) {
-        this.victory_message = message;
-    }
 }

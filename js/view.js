@@ -5,6 +5,14 @@ var View = function(model) {
     this.guess_letter_event = new Event(this);
     this.replay_event = new Event(this);
 
+    this.alphabet_element = document.getElementById("alphabet");
+    this.guesses_remaining_element = document.getElementById("guesses_remaining");
+    this.alphabet_button_elements = document.getElementById("alphabet").getElementsByTagName("BUTTON");
+    this.score_element = document.getElementById("score");
+    this.replay_button_element = document.getElementById("replay_button_div");
+    this.letter_placeholders_element = document.getElementById("letter_placeholders");
+    this.definition_element = document.getElementById("definition");
+
     this.setup_handlers();
     this.enable();
 }
@@ -15,22 +23,21 @@ View.prototype = {
     setup_handlers: function() {
         this.guess_letter_handler = this.guess_letter.bind(this);
         this.determine_btn_color_handler = this.determine_btn_color.bind(this);
-        this.set_word_handler = this.set_word.bind(this);
         this.game_over_handler = this.game_over.bind(this);
-        this.decrement_score_handler = this.decrement_score.bind(this);
+        this.modify_score_handler = this.modify_score.bind(this);
+        this.modify_guesses_handler = this.modify_guesses.bind(this);
         this.replay_button_handler = this.replay_button.bind(this);
         this.replay_handler = this.replay.bind(this);
         this.generate_letter_spaces_handler = this.generate_letter_spaces.bind(this);
         this.generate_definition_handler = this.generate_definition.bind(this);
-        console.log(this.replay_handler);
     },
 
     // Add listeners
     enable: function() {
         this.model.guess_letter_event.add_listener(this.guess_letter_handler);
-        this.model.set_word_event.add_listener(this.set_word_handler);
         this.model.game_over_event.add_listener(this.game_over_handler);
-        this.model.set_score_event.add_listener(this.decrement_score_handler);
+        this.model.guesses_remaining_event.add_listener(this.modify_guesses_handler);
+        this.model.guesses_remaining_event.add_listener(this.modify_score_handler);
         this.model.replay_event.add_listener(this.replay_handler);
         this.model.set_word_display_event.add_listener(this.generate_letter_spaces_handler);
         this.model.set_word_display_event.add_listener(this.generate_definition_handler);
@@ -67,34 +74,38 @@ View.prototype = {
 
         return letter_correct;
     },
-    decrement_score: function(args) {
-        console.log(args.score);
-        let guesses_remaining_element = document.getElementById("guesses_remaining");
-        guesses_remaining_element.textContent = "Guesses Remaining: " + args.score;
+
+    // Modifies the score on the view
+    modify_score: function() {
+        this.score_element.textContent = "Score: " + this.model.get_score();
+    },
+
+    // Modifies the guesses on the view
+    modify_guesses: function() {
+        this.guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_guesses_remaining();
     },
 
     // Initial render of the page
     render: function() {
-        let alphabet_element = document.getElementById('alphabet');
         let alphabet = this.model.get_alphabet();
 
         for (let i = 0; i < alphabet.length; i++) {
             let btn = document.createElement("button");
-            let guesses_remaining_element = document.getElementById("guesses_remaining");
-
-            let attr_class = document.createAttribute("class");
             let current_letter = alphabet[i]['letter'];
 
             let text = document.createTextNode(current_letter);
 
+            let attr_class = document.createAttribute("class");
             attr_class.value = this.determine_btn_color(current_letter);
+
             btn.setAttributeNode(attr_class);
             btn.setAttribute("id", current_letter);
             btn.appendChild(text);
-
-            guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_score();
             btn.onclick = this.return_btn_onclick_handler(current_letter);
-            alphabet_element.appendChild(btn);
+
+            this.guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_guesses_remaining();
+            this.score_element.textContent = "Score: " + this.model.get_score();
+            this.alphabet_element.appendChild(btn);
         }
     },
 
@@ -103,14 +114,9 @@ View.prototype = {
         let btn = document.getElementById(args.letter);
         let attr_class = document.createAttribute("class");
         attr_class.value = this.determine_btn_color(args.letter);
+
         btn.setAttribute('onclick', '');
-
         btn.setAttributeNode(attr_class);
-    },
-
-    set_word: function(sender, args) {
-        // let num_letters_in_word = args.current_word.length;
-        console.log("Hello World");
     },
 
     // Returns a bounded onclick function for a button
@@ -124,15 +130,11 @@ View.prototype = {
 
         return x.bind(this);
     },
+
+    // Disables all buttons, and displays replay button and victory message
     game_over: function(args) {
-        console.log(args.victory_message);
-        let replay_button_element = document.getElementById('replay_button_div');
-        let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
-        let victory_message_element = document.getElementById("victory_message");
-
-
-        for (let i = 0; i < alphabet_buttons.length; i++) {
-            alphabet_buttons[i].setAttribute('onclick', '');
+        for (let i = 0; i < this.alphabet_button_elements.length; i++) {
+            this.alphabet_button_elements[i].setAttribute('onclick', '');
         }
 
         let btn = document.createElement("button");
@@ -141,47 +143,38 @@ View.prototype = {
 
         btn.onclick = this.replay_button_handler;
 
-        replay_button_element.appendChild(btn);
+        this.replay_button_element.appendChild(btn);
         btn.textContent = "Play Again";
-        victory_message_element.textContent = args.victory_message;
-        
-        console.log("GAME OVER FROM VIEW");
+        this.guesses_remaining_element.textContent = args.victory_message;
     },
 
+    // Notifies controller to reset the model state
     replay_button: function() {
         this.replay_event.notify();
     },
 
-
     replay: function() {
-        let alphabet_buttons = document.getElementById("alphabet").getElementsByTagName("BUTTON");
-        let replay_button_element = document.getElementById('replay_button_div');
-        let victory_message_element = document.getElementById('victory_message');
+        this.replay_button_element.textContent = '';
 
-        victory_message_element.textContent = '';
-        replay_button_element.textContent = '';
-
-        for (let i = 0; i < alphabet_buttons.length; i++) {
+        for (let i = 0; i < this.alphabet_button_elements.length; i++) {
             let current_letter = String.fromCharCode(i + lexicographic_offset);
-            console.log(current_letter);
             let btn_color = this.determine_btn_color(current_letter);
-            alphabet_buttons[i].onclick = this.return_btn_onclick_handler(current_letter);
-            alphabet_buttons[i].setAttribute('class', btn_color);
+            this.alphabet_button_elements[i].onclick = this.return_btn_onclick_handler(current_letter);
+            this.alphabet_button_elements[i].setAttribute('class', btn_color);
         }
     },
 
     generate_letter_spaces: function() {
         let current_word_display = this.model.get_current_word_display();
-        let letter_placeholders_element = document.getElementById("letter_placeholders");
-        letter_placeholders_element.textContent = '';
+        
+        this.letter_placeholders_element.textContent = '';
 
         for (let i = 0; i < current_word_display.length; i++) {
-            letter_placeholders_element.textContent += current_word_display[i] + " ";
+            this.letter_placeholders_element.textContent += current_word_display[i] + " ";
         }   
     },
+
     generate_definition: function() {
-        let definition_element = document.getElementById("definition");
-        console.log(this.model.get_current_definition());
-        definition_element.textContent = this.model.get_current_definition();
-    }
+        this.definition_element.textContent = this.model.get_current_definition();
+    },
 }

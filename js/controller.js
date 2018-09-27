@@ -57,18 +57,31 @@ Controller.prototype = {
         }
     },
 
+    get_num_occurences_of_letter: function(letter) {
+        let current_word = this.model.get_current_word();
+        console.log(current_word);
+        let re = new RegExp(letter, 'g');
+        let num_occurences = current_word.match(re);
+        if (num_occurences != null) {
+            return num_occurences.length;
+        } else {
+            return 0;
+        }
+    },
+
     // Updates the model with the guessed letter
     guess_letter: function(sender, args) {
         let letter_in_word = this.letter_in_word(args.letter);
         let guesses_remaining = this.model.get_guesses_remaining();
         let score = this.model.get_score();
+        let num_occurences_of_letter = this.get_num_occurences_of_letter(args.letter);
         if (letter_in_word) {
             this.modify_word_display(args.letter);
-            score++;
+            score += num_occurences_of_letter;
         }  else {
             score--;
+            guesses_remaining--;
         }
-        guesses_remaining--;
         this.model.set_score(score);
         this.model.set_guesses_remaining(guesses_remaining);
         this.model.guess_letter(args.letter, letter_in_word);

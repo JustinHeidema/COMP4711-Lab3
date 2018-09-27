@@ -263,7 +263,6 @@ Model.prototype = {
     replay: function() {
         this.reset_alphabet();
         this.set_word_display(this.current_word);
-        this.set_score(0);
         this.set_guesses_remaining(7);
         this.set_victory_message('');
         this.replay_event.notify();

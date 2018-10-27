@@ -1,9 +1,4 @@
-/* #alphabet {
-    position: absolute;
-    display: inline-block;
-    text-align: center;
-    width: 100%;
-} */
+canvas{ border: 1px solid black; }
 
 #word {
     text-align: center;

@@ -12,6 +12,10 @@ var View = function(model) {
     this.replay_button_element = document.getElementById("replay_button_div");
     this.letter_placeholders_element = document.getElementById("letter_placeholders");
     this.definition_element = document.getElementById("definition");
+    this.canvas_element = document.getElementById("canvas");
+
+    this.canvas_element.width = 300;
+    this.canvas_element.height = 400;
 
     this.setup_handlers();
     this.enable();
@@ -107,6 +111,37 @@ View.prototype = {
             this.score_element.textContent = "Score: " + this.model.get_score();
             this.alphabet_element.appendChild(btn);
         }
+        let canvas_context = this.canvas_element.getContext('2d');
+        let canvasWidthCenter = this.canvas_element.width / 2;
+        let canvasHeightCenter = this.canvas_element.height / 2;
+
+        let headCenterX = canvasWidthCenter;
+        let headCenterY = canvasHeightCenter - 75;
+        let headRadius = 20;
+
+        let leftEyeCenterX = headCenterX - 8 - 2;
+        let rightEyeCenterX = headCenterX + 8 - 2;
+        let bothEyeCenterY = headCenterY - 5 + 2;
+        let eyeRadius = 2;
+
+        canvas_context.beginPath();
+        canvas_context.arc(headCenterX,headCenterY, headRadius, 0, 2 * Math.PI);
+        canvas_context.fillStyle = 'black';
+        canvas_context.stroke();
+        canvas_context.fillStyle = 'white';
+        canvas_context.fill();
+        canvas_context.closePath();
+
+        canvas_context.beginPath();
+        canvas_context.arc(leftEyeCenterX,bothEyeCenterY, eyeRadius, 0, 2 * Math.PI);
+        canvas_context.arc(rightEyeCenterX,bothEyeCenterY, eyeRadius, 0, 2 * Math.PI);
+        canvas_context.fillStyle = 'black';
+        canvas_context.fill();
+
+        canvas_context.beginPath();
+        canvas_context.moveTo(headCenterX - 9, headCenterY + 8);
+        canvas_context.lineTo(headCenterX + 9, headCenterY + 8);
+        canvas_context.stroke();
     },
 
     // Updates the page based on the guessed letter

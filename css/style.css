@@ -4,7 +4,7 @@ canvas{ border: 1px solid black; }
     text-align: center;
 }
 
-button:not(#replay_button){
+button:not(#replay_button):not(#logout_button){
     width: 40px;
     margin: 1px;
 }
@@ -30,5 +30,13 @@ button:not(#replay_button){
 body {
     text-align: center;
     background-color: #9cd9b1 ;
+}
 
+.container {
+    margin-top: 2%;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #F5F5DC;
+    display: inline-block;
+    padding: 10px;
 }

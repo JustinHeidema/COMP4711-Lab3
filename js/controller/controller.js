@@ -15,13 +15,20 @@ Controller.prototype = {
     setup_handlers: function() {
         this.guess_letter_handler = this.guess_letter.bind(this);
         this.replay_handler = this.replay.bind(this);
+        this.save_score_handler = this.save_score.bind(this);
     },
 
     // Add Listeners
     enable: function() {
+        this.view.save_score_event.add_listener(this.save_score_handler);
         this.view.guess_letter_event.add_listener(this.guess_letter_handler);
         this.view.replay_event.add_listener(this.replay_handler);
         return this;
+    },
+
+    save_score: function() {
+        console.log("Controller save_score");
+        this.model.save_score();
     },
 
     // Sets the word to be guessed in the game

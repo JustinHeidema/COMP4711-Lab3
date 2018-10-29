@@ -7,6 +7,8 @@ var Model = function() {
     this.set_word_display_event = new Event(this);
     this.modify_word_display_event = new Event(this);
     this.guesses_remaining_event = new Event(this);
+    this.generate_leader_board_event = new Event(this);
+    this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"
     this.alphabet = [
         {
             letter: 'a',
@@ -189,6 +191,8 @@ var Model = function() {
     this.game_over = false;
     this.victory_message = '';
     this.current_definition = '';
+    this.leader_board = this.generate_leader_board();
+    
 }
 
 
@@ -259,6 +263,36 @@ Model.prototype = {
         });
     },
 
+    generate_leader_board: function() {
+        let xhttp = new XMLHttpRequest();
+        let generate_leader_board_event = this.generate_leader_board_event;
+        xhttp.open("GET", this.endpoint,  true);
+        xhttp.setRequestHeader("Authorization", "eyJraWQiOiJFY2Z0TzdqbGdDVjJFQklUZUVLR0ZpV2p5VzF4dlplN25vZUdnOGloSFdrPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3ZDUwYTM0YS0yZTg1LTQ5M2ItYmRjOS1iNzExYTRhNWNjNTIiLCJhdWQiOiI0b2U0OW12bTJwZTcyZXVsODlzMzQyZGZnZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImRhMzBhMjhkLWRiMTAtMTFlOC04OGU3LTQ5ODFmNDdiYzdjYSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNTQwNzcyNjA2LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl9OYjFkMWJ0SngiLCJjb2duaXRvOnVzZXJuYW1lIjoianJoZWlkZW1hQGdtYWlsLmNvbSIsImV4cCI6MTU0MDc4MDA2NiwiaWF0IjoxNTQwNzc2NDY2LCJlbWFpbCI6ImpyaGVpZGVtYUBnbWFpbC5jb20ifQ.N5DmjLJq34xpp4AU9xVpKy0ErVItbpGNRUNhtX9SvXXwclboJPxuwAng-O8hQ8qcNPbGP5R59l5moH3nKHg7Nu6aD71KIVifkoOKC0w1ylTmt3KwD9YO7mMqvlWtBIkl-YAqX3b3BE7Wh0QeSqsagyuph7AF73UXCl13Dojwg9La-71EvQNHixciDDTIiAZ8EcDS_DE73FHqvGE-V_HRfwqXmbxj9vQKOseOWRvxHBfnSZWgOKcsv2rE1mrnYrMc_jx6VAFeEcTXBIrw6to6T-lLe1w8L_J57Ltqi0ywM4HlcuGtJV_lJMRwSKSZiK7LcR4CN3asakCiRaKwdbCcww");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let leader_board = JSON.parse(this.responseText);
+                console.log("generate_leader_board");
+                console.log(leader_board);
+
+                return leader_board;
+            }
+        };
+    },
+
+    save_score: function() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("POST", this.endpoint,  true);
+        xhttp.setRequestHeader("Authorization", "eyJraWQiOiJFY2Z0TzdqbGdDVjJFQklUZUVLR0ZpV2p5VzF4dlplN25vZUdnOGloSFdrPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3ZDUwYTM0YS0yZTg1LTQ5M2ItYmRjOS1iNzExYTRhNWNjNTIiLCJhdWQiOiI0b2U0OW12bTJwZTcyZXVsODlzMzQyZGZnZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImRhMzBhMjhkLWRiMTAtMTFlOC04OGU3LTQ5ODFmNDdiYzdjYSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNTQwNzcyNjA2LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl9OYjFkMWJ0SngiLCJjb2duaXRvOnVzZXJuYW1lIjoianJoZWlkZW1hQGdtYWlsLmNvbSIsImV4cCI6MTU0MDc4MDA2NiwiaWF0IjoxNTQwNzc2NDY2LCJlbWFpbCI6ImpyaGVpZGVtYUBnbWFpbC5jb20ifQ.N5DmjLJq34xpp4AU9xVpKy0ErVItbpGNRUNhtX9SvXXwclboJPxuwAng-O8hQ8qcNPbGP5R59l5moH3nKHg7Nu6aD71KIVifkoOKC0w1ylTmt3KwD9YO7mMqvlWtBIkl-YAqX3b3BE7Wh0QeSqsagyuph7AF73UXCl13Dojwg9La-71EvQNHixciDDTIiAZ8EcDS_DE73FHqvGE-V_HRfwqXmbxj9vQKOseOWRvxHBfnSZWgOKcsv2rE1mrnYrMc_jx6VAFeEcTXBIrw6to6T-lLe1w8L_J57Ltqi0ywM4HlcuGtJV_lJMRwSKSZiK7LcR4CN3asakCiRaKwdbCcww");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({"score": this.score}));
+        xhttp.onreadystatechange = function () {
+            console.log(this.responseText);
+            this.generate_leader_board();
+        };
+    },
+
     // Resets data for a new game, and notifies the view of update
     replay: function() {
         this.reset_alphabet();
@@ -312,4 +346,7 @@ Model.prototype = {
     get_victory_message: function() {
         return this.victory_message;
     },
+    get_leader_board: function() {
+        return this.leader_board;
+    }
 }

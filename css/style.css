@@ -4,14 +4,18 @@ canvas{ border: 1px solid black; }
     text-align: center;
 }
 
-button:not(#replay_button):not(#logout_button){
+.jumbotron {
+    background-color:  #9cd9b1;
+}
+
+button:not(#replay_button):not(#logout_button):not(#replay_button):not(#save_score_button){
     width: 40px;
     margin: 1px;
 }
 
-#replay_button_div {
-    float: right;
-    text-align: center;
+#logout_button_div {
+    margin-top: 50px;
+    padding: 10px;
 }
 
 #game_container {
@@ -23,8 +27,21 @@ button:not(#replay_button):not(#logout_button){
     padding: 10px;
 }
 
-#replay_button_div {
-    position: absolute;
+#leaderboard_container {
+    padding: 20px;
+}
+
+#leaderboard_container > h1 {
+    margin-top: 1px;
+    padding-bottom: 10px;
+}
+
+.my_container {
+    margin-top: 2%;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #F5F5DC;
+    display: inline-block;
 }
 
 body {
@@ -32,11 +49,52 @@ body {
     background-color: #9cd9b1 ;
 }
 
-.container {
+#signin-container {
     margin-top: 2%;
     border-radius: 15px;
     text-align: center;
     background-color: #F5F5DC;
     display: inline-block;
     padding: 10px;
+    width: 500px;
+}
+
+.auth-input {
+    width: 300px;
+    margin: 10px;
+}
+
+form {
+    display: inline-block;
+}
+
+#signin-submit {
+    display: inline-block;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);
+}
+
+
+.modal-content {
+    background-color: #F5F5DC;
+    margin: 10% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+}
+
+#alphabet {
+    float: right;
+    text-align: center;
 }

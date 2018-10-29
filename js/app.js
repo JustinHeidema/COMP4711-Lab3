@@ -1,7 +1,5 @@
-var Hangman = window.Hangman || {};
-Hangman.map = Hangman.map || {};
 $(function () {
-    var authToken;
+    let authToken;
     Hangman.authToken.then(function setAuthToken(token) {
         if (token) {
             authToken = token;
@@ -11,10 +9,10 @@ $(function () {
             view.render();
             console.log(token);
         } else {
-            window.location.href = 'signin.html';
+            window.location.href = 'index.html';
         }
     }).catch(function handleTokenError(error) {
-        alert(error);
-        window.location.href = 'signin.html';
+        // console.log("Incorrect username or password");
+        // window.location.href = 'index.html';
     });
 });

@@ -1,16 +1,19 @@
 /*global Hangman _config AmazonCognitoIdentity AWSCognito*/
 
-var Hangman = window.Hangman || {};
+let Hangman = window.Hangman || {};
 
 (function scopeWrapper($) {
-    var signinUrl = 'signin.html';
+    let signinUrl = 'index.html';
+    let mainUrl = 'main.html';
+    let registerUrl= 'register.html';
+    let verifyUrl = 'verify.html'
 
-    var poolData = {
+    let poolData = {
         UserPoolId: _config.cognito.userPoolId,
         ClientId: _config.cognito.userPoolClientId
     };
 
-    var userPool;
+    let userPool;
 
     userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -20,11 +23,11 @@ var Hangman = window.Hangman || {};
 
     Hangman.signOut = function signOut() {
         userPool.getCurrentUser().signOut();
-        window.location.href= 'signin.html';
+        window.location.href= signinUrl;
     };
 
     Hangman.authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
-        var cognitoUser = userPool.getCurrentUser();
+        let cognitoUser = userPool.getCurrentUser();
 
         if (cognitoUser) {
             cognitoUser.getSession(function sessionCallback(err, session) {
@@ -41,17 +44,12 @@ var Hangman = window.Hangman || {};
         }
     });
 
-
-    /*
-     * Cognito User Pool functions
-     */
-
     function register(email, password, onSuccess, onFailure) {
-        var dataEmail = {
+        let dataEmail = {
             Name: 'email',
             Value: email
         };
-        var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+        let attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
 
         userPool.signUp(email, password, [attributeEmail], null,
             function signUpCallback(err, result) {
@@ -65,12 +63,12 @@ var Hangman = window.Hangman || {};
     }
 
     function signin(email, password, onSuccess, onFailure) {
-        var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+        let authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
             Username: email,
             Password: password
         });
 
-        var cognitoUser = createCognitoUser(email);
+        let cognitoUser = createCognitoUser(email);
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: onSuccess,
             onFailure: onFailure
@@ -94,10 +92,6 @@ var Hangman = window.Hangman || {};
         });
     }
 
-    /*
-     *  Event Handlers
-     */
-
     $(function onDocReady() {
         $('#registrationForm').submit(handleRegister);
         $('#signinForm').submit(handleSignin);
@@ -105,21 +99,19 @@ var Hangman = window.Hangman || {};
     });
 
     function handleRegister(event) {
-        console.log("Bullshit");
+        let email = $('#emailInputRegister').val();
+        let password = $('#passwordInputRegister').val();
+        let password2 = $('#password2InputRegister').val();
 
-        var email = $('#emailInputRegister').val();
-        var password = $('#passwordInputRegister').val();
-        var password2 = $('#password2InputRegister').val();
-
-        var onSuccess = function registerSuccess(result) {
-            var cognitoUser = result.user;
+        let onSuccess = function registerSuccess(result) {
+            let cognitoUser = result.user;
             console.log('user name is ' + cognitoUser.getUsername());
-            var confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
+            let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
             if (confirmation) {
-                window.location.href = 'verify.html';
+                window.location.href = verifyUrl;
             }
         };
-        var onFailure = function registerFailure(err) {
+        let onFailure = function registerFailure(err) {
             console.log("Error");
             console.log(toString(err));
             console.log(err);
@@ -135,13 +127,14 @@ var Hangman = window.Hangman || {};
     }
 
     function handleSignin(event) {
-        var email = $('#emailInputSignin').val();
-        var password = $('#passwordInputSignin').val();
+        console.log("WHAT THE FUCK IS HAPPENING");
+        let email = $('#emailInputSignin').val();
+        let password = $('#passwordInputSignin').val();
         event.preventDefault();
         signin(email, password,
             function signinSuccess() {
                 console.log('Successfully Logged In');
-                window.location.href = 'index.html';
+                window.location.href = mainUrl;
             },
             function signinError(err) {
                 alert(toString(err));
@@ -150,8 +143,8 @@ var Hangman = window.Hangman || {};
     }
 
     function handleVerify(event) {
-        var email = $('#emailInputVerify').val();
-        var code = $('#codeInputVerify').val();
+        let email = $('#emailInputVerify').val();
+        let code = $('#codeInputVerify').val();
         event.preventDefault();
         verify(email, code,
             function verifySuccess(result) {

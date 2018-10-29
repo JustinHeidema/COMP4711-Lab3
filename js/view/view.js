@@ -1,27 +1,32 @@
 const lexicographic_offset = 97;
-var Hangman = window.Hangman || {};
 
 var View = function(model) {
     this.model = model;
     this.guess_letter_event = new Event(this);
     this.replay_event = new Event(this);
+    this.save_score_event = new Event(this);
 
     this.alphabet_element = document.getElementById("alphabet");
     this.guesses_remaining_element = document.getElementById("guesses_remaining");
     this.alphabet_button_elements = document.getElementById("alphabet").getElementsByTagName("BUTTON");
     this.score_element = document.getElementById("score");
-    this.replay_button_element = document.getElementById("replay_button_div");
+    this.replay_button_element = document.getElementById("replay_button");
     this.letter_placeholders_element = document.getElementById("letter_placeholders");
     this.definition_element = document.getElementById("definition");
     this.logout_button = document.getElementById("logout_button");
-    this.logout_button.onclick = Hangman.signOut;
+    this.modal_element = document.getElementById("modal");
+    this.victory_message_element = document.getElementById("victory_message");
+    this.save_score_button_element = document.getElementById("save_score_button");
     // this.canvas_element = document.getElementById("canvas");
 
     // this.canvas_element.width = 300;
     // this.canvas_element.height = 400;
-
     this.setup_handlers();
     this.enable();
+
+    this.logout_button.onclick = Hangman.signOut;
+    this.replay_button_element.onclick = this.replay_button_handler;
+    this.save_score_button_element.onclick = this.save_score_handler;
 }
 
 View.prototype = {
@@ -37,6 +42,8 @@ View.prototype = {
         this.replay_handler = this.replay.bind(this);
         this.generate_letter_spaces_handler = this.generate_letter_spaces.bind(this);
         this.generate_definition_handler = this.generate_definition.bind(this);
+        this.save_score_handler = this.save_score.bind(this);
+        this.generate_leader_board_handler = this.generate_leader_board.bind(this);
     },
 
     // Add listeners
@@ -49,6 +56,7 @@ View.prototype = {
         this.model.set_word_display_event.add_listener(this.generate_letter_spaces_handler);
         this.model.set_word_display_event.add_listener(this.generate_definition_handler);
         this.model.modify_word_display_event.add_listener(this.generate_letter_spaces_handler);
+        this.model.generate_leader_board_event.add_listener(this.generate_leader_board_handler);
     },
 
     // Determines which color of button should be displayed
@@ -90,6 +98,10 @@ View.prototype = {
     // Modifies the guesses on the view
     modify_guesses: function() {
         this.guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_guesses_remaining();
+    },
+
+    generate_leader_board: function(args) {
+        console.log(this.model.leader_board);
     },
 
     // Initial render of the page
@@ -174,26 +186,20 @@ View.prototype = {
         for (let i = 0; i < this.alphabet_button_elements.length; i++) {
             this.alphabet_button_elements[i].setAttribute('onclick', '');
         }
-
-        let btn = document.createElement("button");
-        btn.setAttribute("class", "btn btn-success");
-        btn.setAttribute("id", "replay_button");
-
-        btn.onclick = this.replay_button_handler;
-
-        this.replay_button_element.appendChild(btn);
-        btn.textContent = "Play Again";
-        this.guesses_remaining_element.textContent = args.victory_message;
+        this.display_victory_message(args.victory_message);
     },
 
     // Notifies controller to reset the model state
     replay_button: function() {
         this.replay_event.notify();
+        modal.style.display = "none";
+    },
+
+    save_score: function() {
+        this.save_score_event.notify();
     },
 
     replay: function() {
-        this.replay_button_element.textContent = '';
-
         for (let i = 0; i < this.alphabet_button_elements.length; i++) {
             let current_letter = String.fromCharCode(i + lexicographic_offset);
             let btn_color = this.determine_btn_color(current_letter);
@@ -218,5 +224,10 @@ View.prototype = {
 
     signout_button: function() {
         Hangman.signout();
+    },
+
+    display_victory_message: function (victory_message) {
+        modal.style.display = "block";
+        this.victory_message_element.textContent = victory_message;
     }
 }

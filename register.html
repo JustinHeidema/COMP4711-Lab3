@@ -7,16 +7,25 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
-        <div id="signin-container" class="container">
-            <section class="form-wrap">
-                <h1>Register</h1>
-                <form id="registrationForm">
-                  <input type="email" id="emailInputRegister" class="form-control auth-input" placeholder="Email" pattern=".*">
-                  <input type="password" id="passwordInputRegister" class="form-control auth-input" placeholder="Password" pattern=".*" >
-                  <input type="password" id="password2InputRegister" class="form-control auth-input" placeholder="Confirm Password" pattern=".*" >
-                  <input type="submit" class="btn btn-info" value="Register">
-                </form>
-            </section>
+        <div class="fluff_container">
+            <div>
+                <h1>Welcome to Hangman</h1>
+            </div>
+        </div>
+        <div class="auth_container">
+            <div id="signin-form-container">
+                <section class="form-wrap">
+                    <h2>Register</h2>
+                    <form id="registrationForm">
+                    <input type="email" id="emailInputRegister" class="form-control auth-input" placeholder="Email" pattern=".*">
+                    <input type="password" id="passwordInputRegister" class="form-control auth-input" placeholder="Password" pattern=".*" >
+                    <input type="password" id="password2InputRegister" class="form-control auth-input" placeholder="Confirm Password" pattern=".*" >
+                    <input type="submit" class="btn btn-info" value="Register">
+                    <h4 id="password_error_message" class="error_message text-danger">Passwords do not match</h4>
+                    <h4 id="user_exists_error_message" class="error_message text-danger">User Already Exists</h4>
+                    </form>
+                </section>
+            </div>
         </div>
         <script src="js/auth/amazon-cognito-identity.min.js"></script>
         <script src="js/auth/config.js"></script>

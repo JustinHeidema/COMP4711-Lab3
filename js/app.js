@@ -3,9 +3,9 @@ $(function () {
     Hangman.authToken.then(function setAuthToken(token) {
         if (token) {
             authToken = token;
-            let model = new Model(),
-            view = new View(model);
-            controller = new Controller(model, view);
+            let model = new Model(authToken),
+            view = new View(model, authToken);
+            controller = new Controller(model, view, authToken);
             view.render();
             console.log(token);
         } else {

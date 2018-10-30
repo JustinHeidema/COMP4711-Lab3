@@ -1,6 +1,6 @@
 const num_words = 10;
 
-var Controller = function(model, view) {
+var Controller = function(model, view, authToken) {
     this.model = model;
     this.view = view;
 

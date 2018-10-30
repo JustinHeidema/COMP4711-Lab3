@@ -2,9 +2,12 @@ const lexicographic_offset = 97;
 
 var View = function(model) {
     this.model = model;
+    this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"
+
     this.guess_letter_event = new Event(this);
     this.replay_event = new Event(this);
     this.save_score_event = new Event(this);
+    this.generate_leader_board_event = new Event(this);
 
     this.alphabet_element = document.getElementById("alphabet");
     this.guesses_remaining_element = document.getElementById("guesses_remaining");
@@ -17,16 +20,13 @@ var View = function(model) {
     this.modal_element = document.getElementById("modal");
     this.victory_message_element = document.getElementById("victory_message");
     this.save_score_button_element = document.getElementById("save_score_button");
+    this.leaderboard_list_element = document.getElementById("leaderboard_list");
     // this.canvas_element = document.getElementById("canvas");
 
     // this.canvas_element.width = 300;
     // this.canvas_element.height = 400;
     this.setup_handlers();
     this.enable();
-
-    this.logout_button.onclick = Hangman.signOut;
-    this.replay_button_element.onclick = this.replay_button_handler;
-    this.save_score_button_element.onclick = this.save_score_handler;
 }
 
 View.prototype = {
@@ -44,6 +44,7 @@ View.prototype = {
         this.generate_definition_handler = this.generate_definition.bind(this);
         this.save_score_handler = this.save_score.bind(this);
         this.generate_leader_board_handler = this.generate_leader_board.bind(this);
+        this.save_score_update_handler = this.save_score_update.bind(this);
     },
 
     // Add listeners
@@ -56,7 +57,26 @@ View.prototype = {
         this.model.set_word_display_event.add_listener(this.generate_letter_spaces_handler);
         this.model.set_word_display_event.add_listener(this.generate_definition_handler);
         this.model.modify_word_display_event.add_listener(this.generate_letter_spaces_handler);
-        this.model.generate_leader_board_event.add_listener(this.generate_leader_board_handler);
+        this.model.save_score_event.add_listener(this.save_score_update_handler);
+    },
+
+    // Generates the leaderboard
+    generate_leader_board: function() {
+        let xhttp = new XMLHttpRequest();
+        let generate_leader_board_event = this.generate_leader_board_event;
+        let leaderboard_list = this.leaderboard_list_element;
+        xhttp.open("GET", this.endpoint,  true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let leader_board = JSON.parse(this.responseText);
+                for (let i = 0; i < leader_board.length; i++) {
+                    leaderboard_list.innerHTML += `<li class=\"list-group-item\">${leader_board[i]['userId']}:\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${leader_board[i]['score']}</li>`;
+                }
+                console.log(leader_board);
+            }
+        };
     },
 
     // Determines which color of button should be displayed
@@ -98,10 +118,6 @@ View.prototype = {
     // Modifies the guesses on the view
     modify_guesses: function() {
         this.guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_guesses_remaining();
-    },
-
-    generate_leader_board: function(args) {
-        console.log(this.model.leader_board);
     },
 
     // Initial render of the page
@@ -157,6 +173,10 @@ View.prototype = {
         // canvas_context.moveTo(headCenterX - 9, headCenterY + 8);
         // canvas_context.lineTo(headCenterX + 9, headCenterY + 8);
         // canvas_context.stroke();
+        this.logout_button.onclick = Hangman.signOut;
+        this.replay_button_element.onclick = this.replay_button_handler;
+        this.save_score_button_element.onclick = this.save_score_handler;
+        this.generate_leader_board();
     },
 
     // Updates the page based on the guessed letter
@@ -199,6 +219,10 @@ View.prototype = {
         this.save_score_event.notify();
     },
 
+    save_score_update: function() {
+        this.modify_save_score_button('', "btn btn-info", "Score Saved!");
+    },
+
     replay: function() {
         for (let i = 0; i < this.alphabet_button_elements.length; i++) {
             let current_letter = String.fromCharCode(i + lexicographic_offset);
@@ -206,6 +230,13 @@ View.prototype = {
             this.alphabet_button_elements[i].onclick = this.return_btn_onclick_handler(current_letter);
             this.alphabet_button_elements[i].setAttribute('class', btn_color);
         }
+        this.modify_save_score_button(this.save_score_handler, "btn btn-success", "Save Score")
+    },
+
+    modify_save_score_button: function(handle, className, message) {
+        this.save_score_button_element.onclick = handle;
+        this.save_score_button_element.className = className
+        this.save_score_button_element.innerHTML = message
     },
 
     generate_letter_spaces: function() {

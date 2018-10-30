@@ -1,6 +1,5 @@
-/*global Hangman _config AmazonCognitoIdentity AWSCognito*/
-
 let Hangman = window.Hangman || {};
+let p = '';
 
 (function scopeWrapper($) {
     let signinUrl = 'index.html';
@@ -104,40 +103,38 @@ let Hangman = window.Hangman || {};
         let password2 = $('#password2InputRegister').val();
 
         let onSuccess = function registerSuccess(result) {
+            document.getElementById("user_exists_error_message").style.display = "none";
             let cognitoUser = result.user;
             console.log('user name is ' + cognitoUser.getUsername());
             let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
             if (confirmation) {
+                p = password;
                 window.location.href = verifyUrl;
             }
         };
         let onFailure = function registerFailure(err) {
-            console.log("Error");
-            console.log(toString(err));
-            console.log(err);
-            alert(err);
+            document.getElementById("user_exists_error_message").style.display = "block";
         };
         event.preventDefault();
 
         if (password === password2) {
+            document.getElementById("password_error_message").style.display = "none";
             register(email, password, onSuccess, onFailure);
         } else {
-            alert('Passwords do not match');
+            document.getElementById("password_error_message").style.display = "block";
         }
     }
 
     function handleSignin(event) {
-        console.log("WHAT THE FUCK IS HAPPENING");
         let email = $('#emailInputSignin').val();
         let password = $('#passwordInputSignin').val();
         event.preventDefault();
         signin(email, password,
             function signinSuccess() {
-                console.log('Successfully Logged In');
                 window.location.href = mainUrl;
             },
             function signinError(err) {
-                alert(toString(err));
+                document.getElementById("signin_error_message").style.display = "block";
             }
         );
     }
@@ -148,13 +145,10 @@ let Hangman = window.Hangman || {};
         event.preventDefault();
         verify(email, code,
             function verifySuccess(result) {
-                console.log('call result: ' + result);
-                console.log('Successfully verified');
-                alert('Verification successful. You will now be redirected to the login page.');
                 window.location.href = signinUrl;
             },
             function verifyError(err) {
-                alert(err);
+                document.getElementById("verify_error_message").style.display = "block";
             }
         );
     }

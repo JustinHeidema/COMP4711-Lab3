@@ -49,8 +49,8 @@ body {
     background-color: #9cd9b1 ;
 }
 
-#signin-container {
-    margin-top: 2%;
+#signin-form-container {
+    margin-top: 20%;
     border-radius: 15px;
     text-align: center;
     background-color: #F5F5DC;
@@ -97,4 +97,30 @@ form {
 #alphabet {
     float: right;
     text-align: center;
+}
+
+#leaderboard_list > li {
+    font-weight: 800;
+}
+
+.fluff_container {
+    background-color: #F5F5DC;;
+    height: 100%;
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+
+.fluff_container > div {
+    margin-top: 50%;
+}
+
+.auth_container {
+    margin-top: 10%;
+    float: right;
+    width: 50%;
+}
+
+.error_message {
+    display: none;
 }

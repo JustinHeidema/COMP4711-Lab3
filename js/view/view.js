@@ -21,6 +21,7 @@ var View = function(model) {
     this.victory_message_element = document.getElementById("victory_message");
     this.save_score_button_element = document.getElementById("save_score_button");
     this.leaderboard_list_element = document.getElementById("leaderboard_list");
+    this.test_button_element = document.getElementById("test_button");
     // this.canvas_element = document.getElementById("canvas");
 
     // this.canvas_element.width = 300;
@@ -45,6 +46,15 @@ View.prototype = {
         this.save_score_handler = this.save_score.bind(this);
         this.generate_leader_board_handler = this.generate_leader_board.bind(this);
         this.save_score_update_handler = this.save_score_update.bind(this);
+    },
+
+    test: function() {
+        console.log("TEST 1");
+        this.test2();
+    },
+
+    test2: function() {
+        console.log("TEST 2");
     },
 
     // Add listeners
@@ -176,6 +186,8 @@ View.prototype = {
         this.logout_button.onclick = Hangman.signOut;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
+        this.test_button_element.onclick = this.test;
+        this.test();
         this.generate_leader_board();
     },
 

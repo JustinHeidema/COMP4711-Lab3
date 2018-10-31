@@ -2,11 +2,17 @@
     <head>
         <title>Register</title>
         <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <h3 id="victory_message">Victory!</h3>
+                <button id="replay_button" class="btn btn-success">Play Again</button>
+                <button id="save_score_button" class="btn btn-success">Save Score</button>
+            </div>
+        </div>
         <div class="fluff_container">
             <img src="img/Hangman.png" />
         </div>
@@ -23,13 +29,19 @@
                     <input type="password" id="password2InputRegister" class="form-control auth-input" placeholder="Confirm Password" pattern=".*" >
                     <h4 id="password_error_message" class="error_message text-danger">Passwords do not match</h4>
                     <h4 id="user_error_message" class="error_message text-danger">Error Creating User</h4>
-                    <input type="submit" class="btn btn-info" value="Register">
                     </form>
+                    <button id="register_button" class="btn btn-info">Register</button>
                 </section>
             </div>
         </div>
-        <script src="js/auth/amazon-cognito-identity.min.js"></script>
+        <script src="js/event_dispatcher.js"></script>
         <script src="js/auth/config.js"></script>
-        <script src="js/auth/cognito-auth.js"></script>
+        <script src="js/model/register_model.js"></script>
+        <script src="js/view/register_view.js"></script>
+        <script src="js/controller/register_controller.js"></script>
+        <script src="js/register_app.js"></script>
+        <script src="js/auth/amazon-cognito-identity.min.js"></script>
+
+        <!-- <script src="js/auth/cognito-auth.js"></script> -->
     </body>
 </html>

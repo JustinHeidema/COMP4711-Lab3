@@ -314,6 +314,7 @@ View.prototype = {
                     this.hman_leg_right.start_y, 
                     this.hman_leg_right.end_x, 
                     this.hman_leg_right.end_y);
+                break;
 
             case 1:
                 // Left Leg
@@ -322,7 +323,7 @@ View.prototype = {
                     this.hman_leg_left.start_y, 
                     this.hman_leg_left.end_x, 
                     this.hman_leg_left.end_y);
-            break;
+                break;
         }
     },
 

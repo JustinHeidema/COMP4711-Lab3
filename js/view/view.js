@@ -120,6 +120,7 @@ View.prototype = {
         this.save_score_handler = this.save_score.bind(this);
         this.generate_leader_board_handler = this.generate_leader_board.bind(this);
         this.save_score_update_handler = this.save_score_update.bind(this);
+        this.add_body_part_handler = this.add_body_part.bind(this);
     },
 
     test: function() {
@@ -136,6 +137,7 @@ View.prototype = {
         this.model.guess_letter_event.add_listener(this.guess_letter_handler);
         this.model.game_over_event.add_listener(this.game_over_handler);
         this.model.guesses_remaining_event.add_listener(this.modify_guesses_handler);
+        this.model.guesses_remaining_event.add_listener(this.add_body_part_handler);
         this.model.guesses_remaining_event.add_listener(this.modify_score_handler);
         this.model.replay_event.add_listener(this.replay_handler);
         this.model.set_word_display_event.add_listener(this.generate_letter_spaces_handler);
@@ -227,7 +229,6 @@ View.prototype = {
         }
     
         this.draw_gallows();
-        this.add_body_part();
         this.logout_button.onclick = Hangman.signOut;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
@@ -264,57 +265,65 @@ View.prototype = {
             this.gallows_3.start_y, 
             this.gallows_3.end_x, 
             this.gallows_3.end_y);
-        
     },
 
-    add_body_part: function() {
-        // Head
-        this.canvas_context.beginPath();
-        this.canvas_context.arc(this.headCenterX,this.headCenterY, this.headRadius, 0, 2 * Math.PI);
-        this.canvas_context.fillStyle = 'black';
-        this.canvas_context.stroke();
-        this.canvas_context.fillStyle = 'white';
-        this.canvas_context.fill();
-        this.canvas_context.closePath();
+    add_body_part: function(sender, args) {
+        switch(args.guesses_remaining) {
+            case 6:
+                // Head
+                this.canvas_context.beginPath();
+                this.canvas_context.arc(this.headCenterX,this.headCenterY, this.headRadius, 0, 2 * Math.PI);
+                this.canvas_context.fillStyle = 'black';
+                this.canvas_context.stroke();
+                this.canvas_context.fillStyle = 'white';
+                this.canvas_context.fill();
+                this.canvas_context.closePath();
+                break;
 
-        // Body
-        this.draw_line(this.canvas_context, 
-            this.hman_body.start_x, 
-            this.hman_body.start_y, 
-            this.hman_body.end_x, 
-            this.hman_body.end_y);
+            case 5:
+                // Body
+                this.draw_line(this.canvas_context, 
+                    this.hman_body.start_x, 
+                    this.hman_body.start_y, 
+                    this.hman_body.end_x, 
+                    this.hman_body.end_y);
+                break;
 
-        // Right Arm
-        this.draw_line(this.canvas_context, 
-            this.hman_arm_right.start_x, 
-            this.hman_arm_right.start_y, 
-            this.hman_arm_right.end_x, 
-            this.hman_arm_right.end_y);
+            case 4:
+                 // Right Arm
+                this.draw_line(this.canvas_context, 
+                    this.hman_arm_right.start_x, 
+                    this.hman_arm_right.start_y, 
+                    this.hman_arm_right.end_x, 
+                    this.hman_arm_right.end_y);
+                break;
+            
+            case 3:
+                // Left Arm
+                this.draw_line(this.canvas_context, 
+                    this.hman_arm_left.start_x, 
+                    this.hman_arm_left.start_y, 
+                    this.hman_arm_left.end_x, 
+                    this.hman_arm_left.end_y);
+                break;
 
-        // Left Arm
-        this.draw_line(this.canvas_context, 
-            this.hman_arm_left.start_x, 
-            this.hman_arm_left.start_y, 
-            this.hman_arm_left.end_x, 
-            this.hman_arm_left.end_y);
+            case 2:
+                // Right Leg
+                this.draw_line(this.canvas_context, 
+                    this.hman_leg_right.start_x, 
+                    this.hman_leg_right.start_y, 
+                    this.hman_leg_right.end_x, 
+                    this.hman_leg_right.end_y);
 
-        // Right Leg
-        this.draw_line(this.canvas_context, 
-            this.hman_leg_right.start_x, 
-            this.hman_leg_right.start_y, 
-            this.hman_leg_right.end_x, 
-            this.hman_leg_right.end_y);
-        
-
-        // Left Leg
-        this.draw_line(this.canvas_context, 
-            this.hman_leg_left.start_x, 
-            this.hman_leg_left.start_y, 
-            this.hman_leg_left.end_x, 
-            this.hman_leg_left.end_y);
-
-        this.canvas_context.beginPath();
-        this.canvas_context.moveTo()
+            case 1:
+                // Left Leg
+                this.draw_line(this.canvas_context, 
+                    this.hman_leg_left.start_x, 
+                    this.hman_leg_left.start_y, 
+                    this.hman_leg_left.end_x, 
+                    this.hman_leg_left.end_y);
+            break;
+        }
     },
 
     // Updates the page based on the guessed letter
@@ -354,6 +363,7 @@ View.prototype = {
     },
 
     save_score: function() {
+        console.log("PAISIDHFPOWQHEPFO");
         this.save_score_event.notify();
     },
 

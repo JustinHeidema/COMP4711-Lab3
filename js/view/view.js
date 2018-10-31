@@ -1,5 +1,6 @@
 const lexicographic_offset = 97;
 
+
 var View = function(model) {
     this.model = model;
     this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"
@@ -21,11 +22,11 @@ var View = function(model) {
     this.victory_message_element = document.getElementById("victory_message");
     this.save_score_button_element = document.getElementById("save_score_button");
     this.leaderboard_list_element = document.getElementById("leaderboard_list");
-    this.test_button_element = document.getElementById("test_button");
-    // this.canvas_element = document.getElementById("canvas");
+    // this.test_button_element = document.getElementById("test_button");
+    this.canvas_element = document.getElementById("canvas");
 
-    // this.canvas_element.width = 300;
-    // this.canvas_element.height = 400;
+    this.canvas_element.width = 300;
+    this.canvas_element.height = 400;
     this.setup_handlers();
     this.enable();
 }
@@ -133,7 +134,6 @@ View.prototype = {
     // Initial render of the page
     render: function() {
         let alphabet = this.model.get_alphabet();
-
         for (let i = 0; i < alphabet.length; i++) {
             let btn = document.createElement("button");
             let current_letter = alphabet[i]['letter'];
@@ -152,43 +152,171 @@ View.prototype = {
             this.score_element.textContent = "Score: " + this.model.get_score();
             this.alphabet_element.appendChild(btn);
         }
-        // let canvas_context = this.canvas_element.getContext('2d');
-        // let canvasWidthCenter = this.canvas_element.width / 2;
-        // let canvasHeightCenter = this.canvas_element.height / 2;
+        let canvas_context = this.canvas_element.getContext('2d');
+        let canvasWidthCenter = this.canvas_element.width / 2;
+        let canvasHeightCenter = this.canvas_element.height / 2;
 
-        // let headCenterX = canvasWidthCenter;
-        // let headCenterY = canvasHeightCenter - 75;
-        // let headRadius = 20;
+        let headCenterX = canvasWidthCenter;
+        let headCenterY = canvasHeightCenter - 75;
+        let headRadius = 20;
 
-        // let leftEyeCenterX = headCenterX - 8 - 2;
-        // let rightEyeCenterX = headCenterX + 8 - 2;
-        // let bothEyeCenterY = headCenterY - 5 + 2;
-        // let eyeRadius = 2;
+        let leftEyeCenterX = headCenterX - 8 - 2;
+        let rightEyeCenterX = headCenterX + 8 - 2;
+        let bothEyeCenterY = headCenterY - 5 + 2;
+        let eyeRadius = 2;
 
-        // canvas_context.beginPath();
-        // canvas_context.arc(headCenterX,headCenterY, headRadius, 0, 2 * Math.PI);
-        // canvas_context.fillStyle = 'black';
-        // canvas_context.stroke();
-        // canvas_context.fillStyle = 'white';
-        // canvas_context.fill();
-        // canvas_context.closePath();
+        // Head
+        canvas_context.beginPath();
+        canvas_context.arc(headCenterX,headCenterY, headRadius, 0, 2 * Math.PI);
+        canvas_context.fillStyle = 'black';
+        canvas_context.stroke();
+        canvas_context.fillStyle = 'white';
+        canvas_context.fill();
+        canvas_context.closePath();
 
+        // // Eyes
         // canvas_context.beginPath();
         // canvas_context.arc(leftEyeCenterX,bothEyeCenterY, eyeRadius, 0, 2 * Math.PI);
         // canvas_context.arc(rightEyeCenterX,bothEyeCenterY, eyeRadius, 0, 2 * Math.PI);
         // canvas_context.fillStyle = 'black';
         // canvas_context.fill();
 
+        // // Mouth
         // canvas_context.beginPath();
         // canvas_context.moveTo(headCenterX - 9, headCenterY + 8);
         // canvas_context.lineTo(headCenterX + 9, headCenterY + 8);
         // canvas_context.stroke();
+
+        let gallows_1 = {
+            start_x: headCenterX,
+            start_y: headCenterY-20,
+            end_x: headCenterX,
+            end_y: headCenterY-60
+        }
+
+        let gallows_2 = {
+            start_x: gallows_1.end_x,
+            start_y: gallows_1.end_y,
+            end_x: gallows_1.end_x - 80,
+            end_y: gallows_1.end_y
+        }
+
+        let gallows_3 = {
+            start_x: gallows_2.end_x,
+            start_y: gallows_2.end_y,
+            end_x: gallows_2.end_x,
+            end_y: gallows_2.end_y  + 200
+        }
+
+        let hman_body = {
+            start_x: headCenterX,
+            start_y: headCenterY + 20,
+            end_x: headCenterX,
+            end_y: headCenterX + 60
+        }
+
+        let hman_arm_right = {
+            start_x: hman_body.start_x,
+            start_y: hman_body.start_y + 25,
+            end_x: hman_body.start_x + 30,
+            end_y: hman_body.start_y + 15
+        }
+
+        let hman_arm_left = {
+            start_x: hman_body.start_x,
+            start_y: hman_body.start_y + 25,
+            end_x: hman_body.start_x - 30,
+            end_y: hman_body.start_y + 15
+        }
+
+        let hman_leg_right = {
+            start_x: hman_body.end_x,
+            start_y: hman_body.end_y,
+            end_x: hman_body.end_x + 25,
+            end_y: hman_body.end_y + 30
+        }
+
+        let hman_leg_left = {
+            start_x: hman_body.end_x,
+            start_y: hman_body.end_y,
+            end_x: hman_body.end_x - 25,
+            end_y: hman_body.end_y + 30
+        }
+
+        // Gallows 1
+        this.draw_line(canvas_context, 
+            gallows_1.start_x, 
+            gallows_1.start_y, 
+            gallows_1.end_x, 
+            gallows_1.end_y);
+
+        // Gallows 2
+        this.draw_line(canvas_context, 
+            gallows_2.start_x, 
+            gallows_2.start_y, 
+            gallows_2.end_x, 
+            gallows_2.end_y);
+
+        // Gallows 3
+        this.draw_line(canvas_context, 
+            gallows_3.start_x, 
+            gallows_3.start_y, 
+            gallows_3.end_x, 
+            gallows_3.end_y);
+
+        // Body
+        this.draw_line(canvas_context, 
+            hman_body.start_x, 
+            hman_body.start_y, 
+            hman_body.end_x, 
+            hman_body.end_y);
+
+        // Right Arm
+        this.draw_line(canvas_context, 
+            hman_arm_right.start_x, 
+            hman_arm_right.start_y, 
+            hman_arm_right.end_x, 
+            hman_arm_right.end_y);
+
+        // Left Arm
+        this.draw_line(canvas_context, 
+            hman_arm_left.start_x, 
+            hman_arm_left.start_y, 
+            hman_arm_left.end_x, 
+            hman_arm_left.end_y);
+
+        // Right Leg
+        this.draw_line(canvas_context, 
+            hman_leg_right.start_x, 
+            hman_leg_right.start_y, 
+            hman_leg_right.end_x, 
+            hman_leg_right.end_y);
+        
+
+        // Left Leg
+        this.draw_line(canvas_context, 
+            hman_leg_left.start_x, 
+            hman_leg_left.start_y, 
+            hman_leg_left.end_x, 
+            hman_leg_left.end_y);
+
+        
+
+        canvas_context.beginPath();
+        canvas_context.moveTo()
         this.logout_button.onclick = Hangman.signOut;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
-        this.test_button_element.onclick = this.test;
+        // this.test_button_element.onclick = this.test;
         this.test();
         this.generate_leader_board();
+    },
+
+    draw_line: function(canvas_context, start_x, start_y, end_x, end_y) {
+        canvas_context.beginPath();
+        canvas_context.moveTo(start_x, start_y);
+        canvas_context.lineTo(end_x, end_y);
+        canvas_context.stroke();
     },
 
     // Updates the page based on the guessed letter

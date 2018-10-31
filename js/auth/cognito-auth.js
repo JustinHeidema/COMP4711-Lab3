@@ -1,5 +1,4 @@
 let Hangman = window.Hangman || {};
-let p = '';
 
 (function scopeWrapper($) {
     let signinUrl = 'index.html';
@@ -103,17 +102,17 @@ let p = '';
         let password2 = $('#password2InputRegister').val();
 
         let onSuccess = function registerSuccess(result) {
-            document.getElementById("user_exists_error_message").style.display = "none";
+            document.getElementById("user_error_message").style.display = "none";
             let cognitoUser = result.user;
             console.log('user name is ' + cognitoUser.getUsername());
             let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
             if (confirmation) {
-                p = password;
                 window.location.href = verifyUrl;
             }
         };
         let onFailure = function registerFailure(err) {
-            document.getElementById("user_exists_error_message").style.display = "block";
+            console.log(err.toString());
+            document.getElementById("user_error_message").style.display = "block";
         };
         event.preventDefault();
 
@@ -148,7 +147,7 @@ let p = '';
                 window.location.href = signinUrl;
             },
             function verifyError(err) {
-                document.getElementById("verify_error_message").style.display = "block";
+                // document.getElementById("verify_error_message").style.display = "block";
             }
         );
     }

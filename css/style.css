@@ -8,7 +8,7 @@ canvas{ border: 1px solid black; }
     background-color:  #9cd9b1;
 }
 
-button:not(#replay_button):not(#logout_button):not(#replay_button):not(#save_score_button){
+button:not(#register_button):not(#replay_button):not(#logout_button):not(#replay_button):not(#save_score_button){
     width: 40px;
     margin: 1px;
 }
@@ -95,8 +95,6 @@ body {
         margin-top: 30vh;
     }
 }
-
-
 
 .fluff_container > div {
     margin: auto;

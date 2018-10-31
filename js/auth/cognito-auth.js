@@ -55,16 +55,6 @@ let Hangman = window.Hangman || {};
         });
     }
 
-    function verify(email, code, onSuccess, onFailure) {
-        createCognitoUser(email).confirmRegistration(code, true, function confirmCallback(err, result) {
-            if (!err) {
-                onSuccess(result);
-            } else {
-                onFailure(err);
-            }
-        });
-    }
-
     function createCognitoUser(email) {
         return new AmazonCognitoIdentity.CognitoUser({
             Username: email,
@@ -74,7 +64,6 @@ let Hangman = window.Hangman || {};
 
     $(function onDocReady() {
         $('#signinForm').submit(handleSignin);
-        $('#verifyForm').submit(handleVerify);
     });
 
 
@@ -88,20 +77,6 @@ let Hangman = window.Hangman || {};
             },
             function signinError(err) {
                 document.getElementById("signin_error_message").style.display = "block";
-            }
-        );
-    }
-
-    function handleVerify(event) {
-        let email = $('#emailInputVerify').val();
-        let code = $('#codeInputVerify').val();
-        event.preventDefault();
-        verify(email, code,
-            function verifySuccess(result) {
-                window.location.href = signinUrl;
-            },
-            function verifyError(err) {
-                // document.getElementById("verify_error_message").style.display = "block";
             }
         );
     }

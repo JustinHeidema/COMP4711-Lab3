@@ -25,14 +25,19 @@
                     <input type="email" id="emailInputVerify" class="form-control auth-input" placeholder="Email" required>
                     <input type="text" id="codeInputVerify" class="form-control auth-input" placeholder="Verification Code" pattern=".*" required>
                     <h4 id="verify_error_message" class="error_message text-danger">User Already Verified</h4>
-                    <input type="submit" class="btn btn-info" value="Verify">
+                    <input id="verify_button" type="submit" class="btn btn-info" value="Verify">
                     </form>
                 </section>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-        <script src="js/auth/amazon-cognito-identity.min.js"></script>
+        <script src="js/event_dispatcher.js"></script>
         <script src="js/auth/config.js"></script>
-        <script src="js/auth/cognito-auth.js"></script>
+        <script src="js/model/verify_model.js"></script>
+        <script src="js/view/verify_view.js"></script>
+        <script src="js/controller/verify_controller.js"></script>
+        <script src="js/register_app.js"></script>
+        <script src="js/auth/amazon-cognito-identity.min.js"></script>
+        <!-- <script src="js/auth/cognito-auth.js"></script> -->
     </body>
 </html>

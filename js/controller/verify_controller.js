@@ -23,10 +23,6 @@ Controller.prototype = {
         this.view.verify_event.add_listener(this.verify_handler);
     },
 
-    test: function() {
-        console.log('ALALALALALA');
-    },
-
     verify: function(email, code, onSuccess, onFailure) {
         this.createCognitoUser(email).confirmRegistration(code, true, function confirmCallback(err, result) {
             if (!err) {

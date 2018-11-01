@@ -23,12 +23,7 @@ Controller.prototype = {
         this.view.register_event.add_listener(this.register_handler);
     },
 
-    test: function() {
-        console.log('ALALALALALA');
-    },
-
     register: function (email, password, onSuccess, onFailure) {
-        console.log("register")
         let dataEmail = {
             Name: 'email',
             Value: email

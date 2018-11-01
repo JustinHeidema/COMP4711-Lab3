@@ -35,5 +35,5 @@ View.prototype = {
 
     render: function() {
         this.signin_button_element.onclick = this.signin_handler;
-    },
+    }
 }

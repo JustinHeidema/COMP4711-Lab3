@@ -22,37 +22,32 @@ var View = function(model) {
     this.victory_message_element = document.getElementById("victory_message");
     this.save_score_button_element = document.getElementById("save_score_button");
     this.leaderboard_list_element = document.getElementById("leaderboard_list");
-    // this.test_button_element = document.getElementById("test_button");
-    this.canvas_element = document.getElementById("canvas");
 
+    this.canvas_element = document.getElementById("canvas");
     this.canvas_element.width = 300;
-    this.canvas_element.height = 400;
+    this.canvas_element.height = 300;
 
     this.canvas_context = this.canvas_element.getContext('2d');
+    this.canvas_context.translate(0.5, 0.5);
+
     this.canvasWidthCenter = this.canvas_element.width / 2;
     this.canvasHeightCenter = this.canvas_element.height / 2;
 
-    this.headCenterX = this.canvasWidthCenter;
-    this.headCenterY = this.canvasHeightCenter - 75;
-    this.headRadius = 20;
+    this.headCenterX = this.canvasWidthCenter + 40;
+    this.headCenterY = this.canvasHeightCenter - 40;
+    this.headRadius = 28;
 
-    // let leftEyeCenterX = headCenterX - 8 - 2;
-    // let rightEyeCenterX = headCenterX + 8 - 2;
-    // let bothEyeCenterY = headCenterY - 5 + 2;
-    // let eyeRadius = 2;
-
-    
     this.gallows_1 = {
         start_x: this.headCenterX,
         start_y: this.headCenterY - 20,
         end_x: this.headCenterX,
-        end_y: this.headCenterY - 60
+        end_y: this.headCenterY - 70
     }
 
     this.gallows_2 = {
         start_x: this.gallows_1.end_x,
         start_y: this.gallows_1.end_y,
-        end_x: this.gallows_1.end_x - 80,
+        end_x: this.gallows_1.end_x - 120,
         end_y: this.gallows_1.end_y
     }
 
@@ -60,30 +55,27 @@ var View = function(model) {
         start_x: this.gallows_2.end_x,
         start_y: this.gallows_2.end_y,
         end_x: this.gallows_2.end_x,
-        end_y: this.gallows_2.end_y  + 200
+        end_y: this.gallows_2.end_y  + 250
     }
 
     this.hman_body = {
         start_x: this.headCenterX,
-        start_y: this.headCenterY + 20,
+        start_y: this.headCenterY + this.headRadius,
         end_x: this.headCenterX,
-        end_y: this.headCenterY + 80
+        end_y: this.headCenterY + 100
     }
-
-    // hman_body.end_x = hman_body.start_x;
-    // hman_body.end_y = hman_body.start_y + 60;
 
     this.hman_arm_right = {
         start_x: this.hman_body.start_x,
         start_y: this.hman_body.start_y + 25,
-        end_x: this.hman_body.start_x + 30,
+        end_x: this.hman_body.start_x + 40,
         end_y: this.hman_body.start_y + 15
     }
 
     this.hman_arm_left = {
         start_x: this.hman_body.start_x,
         start_y: this.hman_body.start_y + 25,
-        end_x: this.hman_body.start_x - 30,
+        end_x: this.hman_body.start_x - 40,
         end_y: this.hman_body.start_y + 15
     }
 
@@ -91,14 +83,14 @@ var View = function(model) {
         start_x: this.hman_body.end_x,
         start_y: this.hman_body.end_y,
         end_x: this.hman_body.end_x + 25,
-        end_y: this.hman_body.end_y + 30
+        end_y: this.hman_body.end_y + 40
     }
 
     this.hman_leg_left = {
         start_x: this.hman_body.end_x,
         start_y: this.hman_body.end_y,
         end_x: this.hman_body.end_x - 25,
-        end_y: this.hman_body.end_y + 30
+        end_y: this.hman_body.end_y + 40
     }
     this.setup_handlers();
     this.enable();
@@ -227,8 +219,7 @@ View.prototype = {
             this.score_element.textContent = "Score: " + this.model.get_score();
             this.alphabet_element.appendChild(btn);
         }
-    
-        this.draw_gallows();
+
         this.logout_button.onclick = Hangman.signOut;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
@@ -270,6 +261,10 @@ View.prototype = {
     add_body_part: function(sender, args) {
         switch(args.guesses_remaining) {
             case 6:
+                this.draw_gallows();
+                break;
+
+            case 5:
                 // Head
                 this.canvas_context.beginPath();
                 this.canvas_context.arc(this.headCenterX,this.headCenterY, this.headRadius, 0, 2 * Math.PI);
@@ -280,7 +275,7 @@ View.prototype = {
                 this.canvas_context.closePath();
                 break;
 
-            case 5:
+            case 4:
                 // Body
                 this.draw_line(this.canvas_context, 
                     this.hman_body.start_x, 
@@ -289,7 +284,7 @@ View.prototype = {
                     this.hman_body.end_y);
                 break;
 
-            case 4:
+            case 3:
                  // Right Arm
                 this.draw_line(this.canvas_context, 
                     this.hman_arm_right.start_x, 
@@ -298,7 +293,7 @@ View.prototype = {
                     this.hman_arm_right.end_y);
                 break;
             
-            case 3:
+            case 2:
                 // Left Arm
                 this.draw_line(this.canvas_context, 
                     this.hman_arm_left.start_x, 
@@ -307,7 +302,7 @@ View.prototype = {
                     this.hman_arm_left.end_y);
                 break;
 
-            case 2:
+            case 1:
                 // Right Leg
                 this.draw_line(this.canvas_context, 
                     this.hman_leg_right.start_x, 
@@ -316,7 +311,7 @@ View.prototype = {
                     this.hman_leg_right.end_y);
                 break;
 
-            case 1:
+            case 0:
                 // Left Leg
                 this.draw_line(this.canvas_context, 
                     this.hman_leg_left.start_x, 
@@ -379,7 +374,8 @@ View.prototype = {
             this.alphabet_button_elements[i].onclick = this.return_btn_onclick_handler(current_letter);
             this.alphabet_button_elements[i].setAttribute('class', btn_color);
         }
-        this.modify_save_score_button(this.save_score_handler, "btn btn-success", "Save Score")
+        this.modify_save_score_button(this.save_score_handler, "btn btn-success", "Save Score");
+        this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     },
 
     modify_save_score_button: function(handle, className, message) {

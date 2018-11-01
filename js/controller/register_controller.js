@@ -58,11 +58,19 @@ Controller.prototype = {
             // document.getElementById("user_error_message").style.display = "block";
         };
 
-        if (args.password === args.password2) {
-            console.log("password === password")
-            this.register(args.email, args.password, onSuccess, onFailure);
+        console.log(args);
+
+        if (args.password == '' || args.password2 == '' || args.email == '') {
+            console.log("Please fill out all fields");
+            m.missing_info_error();
+        }
+        else if (args.password !== args.password2) {
+            console.log("password !== password")
+            m.passwords_do_not_match_error();
             // document.getElementById("password_error_message").style.display = "none";
         } else {
+            console.log("password === password")
+            this.register(args.email, args.password, onSuccess, onFailure);
             // document.getElementById("password_error_message").style.display = "block";
         }
     }

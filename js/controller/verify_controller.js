@@ -24,6 +24,7 @@ Controller.prototype = {
     },
 
     verify: function(email, code, onSuccess, onFailure) {
+        console.log("controller verify");
         this.createCognitoUser(email).confirmRegistration(code, true, function confirmCallback(err, result) {
             if (!err) {
                 onSuccess(result);
@@ -34,15 +35,24 @@ Controller.prototype = {
     },
 
     handleVerify: function(sender, args) {
+        console.log("handle verify")
         let m = this.model;
-        this.verify(args.email, args.code,
-            function verifySuccess(result) {
-                m.verify();
-            },
-            function verifyError(err) {
-                // document.getElementById("verify_error_message").style.display = "block";
-            }
-        );
+        if (args.email == "" || args.code == "") {
+            console.log("PAUOHSDPFOIHQWEF");
+            m.missing_info_error();
+        } else {
+            this.verify(args.email, args.code,
+                function verifySuccess(result) {
+                    console.log("WHYYY");
+                    m.verify();
+                },
+                function verifyError(err) {
+                    console.log("BULLSHIT");
+                    // document.getElementById("verify_error_message").style.display = "block";
+                }
+            );
+        }
+
     },
 
     createCognitoUser: function(email) {

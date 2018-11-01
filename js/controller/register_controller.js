@@ -9,7 +9,6 @@ var Controller = function(model, view, authToken) {
     };
 
     this.userPool = new AmazonCognitoIdentity.CognitoUserPool(this.poolData);
-
     this.setup_handlers();
     this.enable();
 }
@@ -55,13 +54,12 @@ Controller.prototype = {
             let cognitoUser = result.user;
             let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
             if (confirmation) {
-                
+                m.register();
                 // window.location.href = "verify.html";
             }
         };
         let onFailure = function registerFailure(err) {
             console.log("on failure");
-            m.register();
             // document.getElementById("user_error_message").style.display = "block";
         };
 

@@ -38,9 +38,10 @@ Controller.prototype = {
     },
 
     handleVerify: function(sender, args) {
+        let m = this.model;
         this.verify(args.email, args.code,
             function verifySuccess(result) {
-                window.location.href = signinUrl;
+                m.verify();
             },
             function verifyError(err) {
                 // document.getElementById("verify_error_message").style.display = "block";

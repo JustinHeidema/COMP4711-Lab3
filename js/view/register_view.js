@@ -32,7 +32,6 @@ View.prototype = {
     },
 
     register_update: function() {
-        console.log("register_update");
         this.modal_element.style.display = 'block';
     },
 

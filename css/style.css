@@ -8,7 +8,7 @@ canvas{ border: 1px solid black; }
     background-color:  #9cd9b1;
 }
 
-button:not(#register_button):not(#replay_button):not(#logout_button):not(#replay_button):not(#save_score_button){
+button:not(#ok_button):not(#register_button):not(#replay_button):not(#logout_button):not(#replay_button):not(#save_score_button){
     width: 40px;
     margin: 1px;
 }

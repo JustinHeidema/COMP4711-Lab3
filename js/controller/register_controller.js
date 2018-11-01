@@ -50,22 +50,18 @@ Controller.prototype = {
     },
 
     handleRegister: function (sender, args) {
-        console.log("handle register");
-        console.log(args);
-
+        let m = this.model;
         let onSuccess = function registerSuccess(result) {
-            console.log("onsuccess");
-            // document.getElementById("user_error_message").style.display = "none";
-            console.log(result.user);
             let cognitoUser = result.user;
-            console.log('user name is ' + cognitoUser.getUsername());
             let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
             if (confirmation) {
-                window.location.href = "verify.html";
+                
+                // window.location.href = "verify.html";
             }
         };
         let onFailure = function registerFailure(err) {
-            console.log("on failure")
+            console.log("on failure");
+            m.register();
             // document.getElementById("user_error_message").style.display = "block";
         };
 

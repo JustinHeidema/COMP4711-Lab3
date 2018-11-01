@@ -7,8 +7,12 @@ var View = function(model) {
 
 View.prototype = {
 
-    setup_handlers() {
+    setup_handlers: function() {
         this.verify_handler = this.verify.bind(this);
+    },
+
+    enable: function() {
+        
     },
 
     verify: function() {

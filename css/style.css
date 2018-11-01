@@ -18,30 +18,64 @@ button:not(#signin_button):not(#verify_button):not(#ok_button):not(#register_but
     padding: 10px;
 }
 
-#game_container {
-    margin-top: 2%;
-    border-radius: 15px;
+#app_container {
     text-align: center;
-    background-color: #F5F5DC;
-    display: inline-block;
-    padding: 10px;
 }
 
-#leaderboard_container {
-    padding: 20px;
+@media only screen and (min-width: 1500px) {
+    #leaderboard_container {
+        margin-top: 2%;
+        margin-right: 2%;
+        float: right;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        background-color: #F5F5DC;
+        display: block;
+    }
+
+    #game_container {
+        margin-top: 2%;
+        margin-left: 2%;
+        border-radius: 15px;
+        text-align: center;
+        background-color: #F5F5DC;
+        padding: 10px;
+        display: inline-block;
+        float: left;
+    }
+
 }
+
+@media only screen and (max-width: 1500px) {
+    #leaderboard_container {
+        margin-top: 2%;
+        margin-right: 2%;
+        margin-left: 2%;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        background-color: #F5F5DC;
+        display: block;
+    }
+
+    #game_container {
+        margin-top: 2%;
+        margin-right: 2%;
+        margin-left: 2%;
+        border-radius: 15px;
+        text-align: center;
+        background-color: #F5F5DC;
+        padding: 10px;
+        display: block;
+    }
+}
+
+
 
 #leaderboard_container > h1 {
     margin-top: 1px;
     padding-bottom: 10px;
-}
-
-.my_container {
-    margin-top: 2%;
-    border-radius: 15px;
-    text-align: center;
-    background-color: #F5F5DC;
-    display: inline-block;
 }
 
 body {
@@ -101,7 +135,9 @@ body {
     margin-top: 20vh;
 }
 
-
+#leaderboard_outer_container {
+    display: inline-block;
+}
 .auth-input {
     width: 300px;
     margin: 10px;

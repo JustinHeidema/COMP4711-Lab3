@@ -42,6 +42,9 @@ View.prototype = {
 
     render: function() {
         this.register_button_element.onclick = this.register_handler;
+        this.register_button_element.addEventListener("click", function(event){
+            event.preventDefault();
+        });
         this.ok_button_element.onclick = function() {
             window.location.href = "verify.html";
         }

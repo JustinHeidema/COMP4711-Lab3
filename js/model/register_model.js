@@ -12,5 +12,9 @@ Model.prototype = {
 
     missing_info_error: function() {
         this.missing_info_error_event.notify();
+    },
+
+    passwords_do_not_match_error: function() {
+        this.passwords_do_not_match_event.notify();
     }
 }

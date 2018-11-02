@@ -143,7 +143,6 @@ View.prototype = {
                 for (let i = 0; i < leader_board.length; i++) {
                     leaderboard_list.innerHTML += `<li class=\"list-group-item\">${leader_board[i]['userId']}:\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${leader_board[i]['score']}</li>`;
                 }
-                console.log(leader_board);
             }
         };
     },
@@ -181,12 +180,12 @@ View.prototype = {
 
     // Modifies the score on the view
     modify_score: function() {
-        this.score_element.textContent = "Score: " + this.model.get_score();
+        this.score_element.textContent = score_message + this.model.get_score();
     },
 
     // Modifies the guesses on the view
     modify_guesses: function() {
-        this.guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_guesses_remaining();
+        this.guesses_remaining_element.textContent = guesses_remaining_message + this.model.get_guesses_remaining();
     },
 
     // Initial render of the page
@@ -206,8 +205,8 @@ View.prototype = {
             btn.appendChild(text);
             btn.onclick = this.return_btn_onclick_handler(current_letter);
 
-            this.guesses_remaining_element.textContent = "Guesses Remaining: " + this.model.get_guesses_remaining();
-            this.score_element.textContent = "Score: " + this.model.get_score();
+            this.guesses_remaining_element.textContent = guesses_remaining_message + this.model.get_guesses_remaining();
+            this.score_element.textContent = score_message + this.model.get_score();
             this.alphabet_element.appendChild(btn);
         }
 
@@ -348,12 +347,11 @@ View.prototype = {
     },
 
     save_score: function() {
-        console.log("PAISIDHFPOWQHEPFO");
         this.save_score_event.notify();
     },
 
     save_score_update: function() {
-        this.modify_save_score_button('', "btn btn-info", "Score Saved!");
+        this.modify_save_score_button('', "btn btn-info", score_saved_button_message);
     },
 
     replay: function() {
@@ -363,7 +361,7 @@ View.prototype = {
             this.alphabet_button_elements[i].onclick = this.return_btn_onclick_handler(current_letter);
             this.alphabet_button_elements[i].setAttribute('class', btn_color);
         }
-        this.modify_save_score_button(this.save_score_handler, "btn btn-success", "Save Score");
+        this.modify_save_score_button(this.save_score_handler, "btn btn-success", save_score_button_message);
         this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
         this.generate_leader_board();
     },

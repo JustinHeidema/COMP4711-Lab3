@@ -24,7 +24,6 @@ View.prototype = {
     },
 
     verify: function() {
-        console.log("verify");
         let email = document.getElementById("emailInputVerify").value;
         let code = document.getElementById("codeInputVerify").value;
 
@@ -35,7 +34,6 @@ View.prototype = {
     },
 
     verify_update: function() {
-        console.log("verify_update");
         this.modal_element.style.display = 'block';
     },
 
@@ -49,8 +47,7 @@ View.prototype = {
         }
     },
     missing_info_error_update: function() {
-        console.log("hsushshsd");
         this.error_message_element.style.display = 'block';
-        this.error_message_element.innerHTML = "Please fill in all fields";
+        this.error_message_element.innerHTML = error_missing_info;
     }
 }

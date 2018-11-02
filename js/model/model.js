@@ -237,9 +237,9 @@ Model.prototype = {
     // victory message
     set_game_over: function(win_condition_met) {
         if (win_condition_met) {
-            this.set_victory_message("VICTORY");
+            this.set_victory_message(victory_message);
         } else {
-            this.set_victory_message("DEFEAT");
+            this.set_victory_message(defeat_message);
         }  
         this.game_over = true;
         this.game_over_event.notify({

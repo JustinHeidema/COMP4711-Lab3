@@ -27,7 +27,6 @@ Controller.prototype = {
     },
 
     save_score: function() {
-        console.log("Controller save_score");
         this.model.save_score();
     },
 
@@ -66,7 +65,6 @@ Controller.prototype = {
 
     get_num_occurences_of_letter: function(letter) {
         let current_word = this.model.get_current_word();
-        console.log(current_word);
         let re = new RegExp(letter, 'g');
         let num_occurences = current_word.match(re);
         if (num_occurences != null) {

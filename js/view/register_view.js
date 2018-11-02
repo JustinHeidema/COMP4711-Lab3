@@ -52,11 +52,11 @@ View.prototype = {
 
     missing_info_error_update: function() {
         this.error_message_element.style.display = 'block';
-        this.error_message_element.innerHTML = "Please fill in all fields";
+        this.error_message_element.innerHTML = error_missing_info;
     },
 
     passwords_do_not_match_error_update: function() {
         this.error_message_element.style.display = 'block';
-        this.error_message_element.innerHTML = "Passwords do not match";
+        this.error_message_element.innerHTML = error_passwords_do_not_match;
     }
 }

@@ -37,9 +37,10 @@ Controller.prototype = {
     },
 
     handleSignin: function(sender, args) {
+        let mainUrl = this.mainUrl;
         this.signin(args.email, args.password,
             function signinSuccess() {
-                window.location.href = "main.html";
+                window.location.href = mainUrl;
             },
             function signinError(err) {
                 document.getElementById("signin_error_message").style.display = "block";

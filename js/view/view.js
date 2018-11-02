@@ -97,7 +97,6 @@ var View = function(model) {
 }
 
 View.prototype = {
-
     // Setup Handlers
     setup_handlers: function() {
         this.guess_letter_handler = this.guess_letter.bind(this);
@@ -113,15 +112,6 @@ View.prototype = {
         this.generate_leader_board_handler = this.generate_leader_board.bind(this);
         this.save_score_update_handler = this.save_score_update.bind(this);
         this.add_body_part_handler = this.add_body_part.bind(this);
-    },
-
-    test: function() {
-        console.log("TEST 1");
-        this.test2();
-    },
-
-    test2: function() {
-        console.log("TEST 2");
     },
 
     // Add listeners
@@ -143,6 +133,7 @@ View.prototype = {
         let xhttp = new XMLHttpRequest();
         let generate_leader_board_event = this.generate_leader_board_event;
         let leaderboard_list = this.leaderboard_list_element;
+        leaderboard_list.innerHTML = '';
         xhttp.open("GET", this.endpoint,  true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send();
@@ -223,8 +214,6 @@ View.prototype = {
         this.logout_button.onclick = Hangman.signOut;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
-        // this.test_button_element.onclick = this.test;
-        this.test();
         this.generate_leader_board();
     },
 
@@ -376,6 +365,7 @@ View.prototype = {
         }
         this.modify_save_score_button(this.save_score_handler, "btn btn-success", "Save Score");
         this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
+        this.generate_leader_board();
     },
 
     modify_save_score_button: function(handle, className, message) {

@@ -263,37 +263,8 @@ Model.prototype = {
         });
     },
 
-    // generate_leader_board: function() {
-    //     let xhttp = new XMLHttpRequest();
-    //     let generate_leader_board_event = this.generate_leader_board_event;
-    //     xhttp.open("GET", this.endpoint,  true);
-    //     xhttp.setRequestHeader("Authorization", "eyJraWQiOiJFY2Z0TzdqbGdDVjJFQklUZUVLR0ZpV2p5VzF4dlplN25vZUdnOGloSFdrPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3ZDUwYTM0YS0yZTg1LTQ5M2ItYmRjOS1iNzExYTRhNWNjNTIiLCJhdWQiOiI0b2U0OW12bTJwZTcyZXVsODlzMzQyZGZnZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJldmVudF9pZCI6ImI0OTRjMTc2LWRiYzgtMTFlOC1hMzQ4LWU3MzcxNmVkZWNhMyIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNTQwODUxNTcwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl9OYjFkMWJ0SngiLCJjb2duaXRvOnVzZXJuYW1lIjoianJoZWlkZW1hQGdtYWlsLmNvbSIsImV4cCI6MTU0MDg1NTE3MCwiaWF0IjoxNTQwODUxNTcwLCJlbWFpbCI6ImpyaGVpZGVtYUBnbWFpbC5jb20ifQ.prdkVmZ5otMfhbJ_Ud8wzj56BjulZy9T_MBL6qw_nxX4daZ57wGNtNosV-ma5TR8SjtUymx5Uxa2SgIEUleG8DfCD5_0mkJmxRsM55O9NYZasSKJfB3UQWRd9MBlowROxN7-iQRJqfq60I919hg_GfJZCLcMFpYI8NWLKOyy7SeKfbH_Mh58wiVJKn6UzBqJcYowFYYTZmqBiPSLwtQ0nD8pi3troxpCAN1rhZrtZUDyFEiM-SCXzuAvHptA71uEBAhQL6XUcW_-RX6GUmEu71UxcWtsrWZA4cuj6AFL4MMHHEAiIRte2RotsRf7YV7nh7LcPu1KVcSpwNtwFg_gAw");
-    //     xhttp.setRequestHeader("Content-Type", "application/json");
-    //     xhttp.send();
-    //     xhttp.onreadystatechange = function () {
-    //         if (this.readyState == 4 && this.status == 200) {
-    //             let leader_board = JSON.parse(this.responseText);
-    //             console.log("generate_leader_board");
-    //             console.log(leader_board);
-    //         }
-    //     };
-    // },
-
     save_score: function() {
-        test(this.token, this.endpoint, this.score, this.save_score_event);
-        // let xhttp = new XMLHttpRequest();
-        // let save_score_event = this.set_score_event;
-        // xhttp.open("POST", this.endpoint,  true);
-        // xhttp.setRequestHeader("Authorization", this.token);
-        // xhttp.setRequestHeader("Content-Type", "application/json");
-        // xhttp.send(JSON.stringify({"score": this.score}));
-        // xhttp.onreadystatechange = function () {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         console.log("save_score");
-        //         test();
-        //         save_score_event.notify();
-        //     }
-        // };
+        save(this.token, this.endpoint, this.score, this.save_score_event);
     },
 
     // Resets data for a new game, and notifies the view of update
@@ -354,8 +325,7 @@ Model.prototype = {
     }
 }
 
-
-function test(auth, url, score, event) {
+function save(auth, url, score, event) {
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", url,  true);
     xhttp.setRequestHeader("Authorization", auth);

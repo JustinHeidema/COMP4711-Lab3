@@ -20,6 +20,7 @@ button:not(#signin_button):not(#verify_button):not(#ok_button):not(#register_but
 
 #app_container {
     text-align: center;
+    overflow: hidden;
 }
 
 @media only screen and (min-width: 1500px) {
@@ -31,7 +32,6 @@ button:not(#signin_button):not(#verify_button):not(#ok_button):not(#register_but
         border-radius: 15px;
         text-align: center;
         background-color: #F5F5DC;
-        display: block;
     }
 
     #game_container {
@@ -41,7 +41,7 @@ button:not(#signin_button):not(#verify_button):not(#ok_button):not(#register_but
         text-align: center;
         background-color: #F5F5DC;
         padding: 10px;
-        display: inline-block;
+        display: block;
         float: left;
     }
 

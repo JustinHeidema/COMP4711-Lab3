@@ -200,17 +200,19 @@ View.prototype = {
             this.alphabet_element.appendChild(btn);
         }
 
-        this.logout_button.onclick = Hangman.signOut;
+        this.logout_button.onclick = this.signout_button;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
         this.generate_leader_board();
         this.draw_gallows();
     },
 
+    // Updates leaderboard array in model
     generate_leader_board: function() {
         this.generate_leaderboard_event.notify();
     },
 
+    // Updates leaderboard visually
     generate_leaderboard_update: function() {
         this.leaderboard_list_element.innerHTML = '';
         for (let i = 0; i < this.model.leaderboard_list.length; i++) {
@@ -218,6 +220,7 @@ View.prototype = {
         }
     },
 
+    // Helper function to draw lines
     draw_line: function(canvas_context, start_x, start_y, end_x, end_y) {
         canvas_context.beginPath();
         canvas_context.moveTo(start_x, start_y);
@@ -249,6 +252,7 @@ View.prototype = {
             this.gallows_3.end_y);
     },
 
+    // Adds a body part to the hangman
     add_body_part: function(sender, args) {
         this.canvas_context.lineWidth = 2;
         switch(args.guesses_remaining) {
@@ -360,15 +364,18 @@ View.prototype = {
         modal.style.display = "none";
     },
 
+    // Saves the score
     save_score: function() {
         this.save_score_event.notify();
     },
 
+    // Updates button to indicate score was saved
     save_score_update: function() {
         this.modify_save_score_button('', "btn btn-info", score_saved_button_message);
         this.update_leaderboard_event.notify();
     },
 
+    // Re renders UI for another game
     replay: function() {
         for (let i = 0; i < this.alphabet_button_elements.length; i++) {
             let current_letter = String.fromCharCode(i + lexicographic_offset);
@@ -382,12 +389,14 @@ View.prototype = {
         this.draw_gallows();
     },
 
+    //  Helper function to modify display of save score button
     modify_save_score_button: function(handle, className, message) {
         this.save_score_button_element.onclick = handle;
         this.save_score_button_element.className = className
         this.save_score_button_element.innerHTML = message
     },
 
+    // Generates letter spaces
     generate_letter_spaces: function() {
         let current_word_display = this.model.get_current_word_display();
         
@@ -398,12 +407,23 @@ View.prototype = {
         }   
     },
 
+    // Adds definition to the UI
     generate_definition: function() {
         this.definition_element.textContent = this.model.get_current_definition();
     },
 
+    // Adds signout functionality
     signout_button: function() {
-        Hangman.signout();
+        let poolData = {
+            UserPoolId: _config.cognito.userPoolId,
+            ClientId: _config.cognito.userPoolClientId
+        };
+
+        console.log(poolData);
+    
+        let userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+        userPool.getCurrentUser().signOut();
+        window.location.href= "index.html";
     },
 
     display_victory_message: function (victory_message) {

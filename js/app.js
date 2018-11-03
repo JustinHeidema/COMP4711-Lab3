@@ -7,7 +7,6 @@ $(function () {
             view = new View(model, authToken);
             controller = new Controller(model, view, authToken);
             view.render();
-            console.log(token);
         } else {
             window.location.href = 'index.html';
         }

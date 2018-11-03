@@ -8,7 +8,8 @@ var View = function(model) {
     this.guess_letter_event = new Event(this);
     this.replay_event = new Event(this);
     this.save_score_event = new Event(this);
-    this.generate_leader_board_event = new Event(this);
+    this.generate_leaderboard_event = new Event(this);
+    this.update_leaderboard_event = new Event(this);
 
     this.alphabet_element = document.getElementById("alphabet");
     this.guesses_remaining_element = document.getElementById("guesses_remaining");
@@ -112,6 +113,7 @@ View.prototype = {
         this.generate_leader_board_handler = this.generate_leader_board.bind(this);
         this.save_score_update_handler = this.save_score_update.bind(this);
         this.add_body_part_handler = this.add_body_part.bind(this);
+        this.generate_leaderboard_update_handler = this.generate_leaderboard_update.bind(this);
     },
 
     // Add listeners
@@ -126,25 +128,7 @@ View.prototype = {
         this.model.set_word_display_event.add_listener(this.generate_definition_handler);
         this.model.modify_word_display_event.add_listener(this.generate_letter_spaces_handler);
         this.model.save_score_event.add_listener(this.save_score_update_handler);
-    },
-
-    // Generates the leaderboard
-    generate_leader_board: function() {
-        let xhttp = new XMLHttpRequest();
-        let generate_leader_board_event = this.generate_leader_board_event;
-        let leaderboard_list = this.leaderboard_list_element;
-        leaderboard_list.innerHTML = '';
-        xhttp.open("GET", this.endpoint,  true);
-        xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let leader_board = JSON.parse(this.responseText);
-                for (let i = 0; i < leader_board.length; i++) {
-                    leaderboard_list.innerHTML += `<li class=\"list-group-item\">${leader_board[i]['userId']}:\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${leader_board[i]['score']}</li>`;
-                }
-            }
-        };
+        this.model.generate_leaderboard_event.add_listener(this.generate_leaderboard_update_handler);
     },
 
     // Determines which color of button should be displayed
@@ -214,6 +198,17 @@ View.prototype = {
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
         this.generate_leader_board();
+    },
+
+    generate_leader_board: function() {
+        this.generate_leaderboard_event.notify();
+    },
+
+    generate_leaderboard_update: function() {
+        this.leaderboard_list_element.innerHTML = '';
+        for (let i = 0; i < this.model.leaderboard_list.length; i++) {
+            this.leaderboard_list_element.innerHTML += `<li class=\"list-group-item\">${this.model.leaderboard_list[i]['userId']}:\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${this.model.leaderboard_list[i]['score']}</li>`;
+        }
     },
 
     draw_line: function(canvas_context, start_x, start_y, end_x, end_y) {
@@ -352,6 +347,7 @@ View.prototype = {
 
     save_score_update: function() {
         this.modify_save_score_button('', "btn btn-info", score_saved_button_message);
+        this.update_leaderboard_event.notify();
     },
 
     replay: function() {
@@ -363,7 +359,7 @@ View.prototype = {
         }
         this.modify_save_score_button(this.save_score_handler, "btn btn-success", save_score_button_message);
         this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
-        this.generate_leader_board();
+        this.generate_leaderboard_update();
     },
 
     modify_save_score_button: function(handle, className, message) {

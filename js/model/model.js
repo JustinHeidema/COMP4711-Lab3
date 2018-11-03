@@ -9,6 +9,7 @@ var Model = function(authToken) {
     this.modify_word_display_event = new Event(this);
     this.guesses_remaining_event = new Event(this);
     this.save_score_event = new Event(this);
+    this.generate_leaderboard_event = new Event(this);
     this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"
     this.alphabet = [
         {
@@ -184,6 +185,7 @@ var Model = function(authToken) {
             definition: "Feeling or expressing overwhelming happiness or joyful excitement"
         }
     ];
+    this.leaderboard_list = [];
     this.current_word = '';
     this.current_word_display = '';
     this.current_word_display_l = []
@@ -282,6 +284,16 @@ Model.prototype = {
             element['selected'] = false;
             element['correct'] = false;
         });
+    },
+
+    generate_leaderboard: function(leaderboard_list) {
+        this.leaderboard_list = leaderboard_list;
+        this.generate_leaderboard_event.notify();
+        console.log(this.leaderboard_list);
+    },
+
+    update_leaderboard: function(leaderboard_list) {
+        this.leaderboard_list = leaderboard_list;
     },
 
     // Modifies the appropriate blank spaces in the word

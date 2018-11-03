@@ -16,6 +16,8 @@ Controller.prototype = {
         this.guess_letter_handler = this.guess_letter.bind(this);
         this.replay_handler = this.replay.bind(this);
         this.save_score_handler = this.save_score.bind(this);
+        this.generate_leader_board_handler = this.generate_leader_board.bind(this);
+        this.update_leaderboard_handler = this.update_leaderboard.bind(this);
     },
 
     // Add Listeners
@@ -23,6 +25,8 @@ Controller.prototype = {
         this.view.save_score_event.add_listener(this.save_score_handler);
         this.view.guess_letter_event.add_listener(this.guess_letter_handler);
         this.view.replay_event.add_listener(this.replay_handler);
+        this.view.generate_leaderboard_event.add_listener(this.generate_leader_board_handler);
+        this.view.update_leaderboard_event.add_listener(this.update_leaderboard_handler);
         return this;
     },
 
@@ -40,6 +44,35 @@ Controller.prototype = {
     replay: function() {
         this.set_word();
         this.model.replay();
+    },
+
+    update_leaderboard: function() {
+        let m = this.model;
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", this.view.endpoint,  true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let leaderboard_list = JSON.parse(this.responseText);
+                m.update_leaderboard(leaderboard_list);
+            }
+        };
+    },
+
+    // Generates the leaderboard
+    generate_leader_board: function() {
+        let m = this.model;
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", this.view.endpoint,  true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let leaderboard_list = JSON.parse(this.responseText);
+                m.generate_leaderboard(leaderboard_list);
+            }
+        };
     },
 
     modify_word_display: function(letter) {

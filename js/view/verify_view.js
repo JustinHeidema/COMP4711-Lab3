@@ -16,11 +16,13 @@ View.prototype = {
         this.verify_handler = this.verify.bind(this);
         this.verify_update_handler = this.verify_update.bind(this);
         this.missing_info_error_update_handler = this.missing_info_error_update.bind(this);
+        this.verify_error_update_handler = this.verify_error_update.bind(this);
     },
 
     enable: function() {
         this.model.verify_event.add_listener(this.verify_update_handler);
         this.model.missing_info_error_event.add_listener(this.missing_info_error_update_handler);
+        this.model.verify_error_event.add_listener(this.verify_error_update_handler);
     },
 
     verify: function() {
@@ -49,5 +51,10 @@ View.prototype = {
     missing_info_error_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_missing_info;
+    },
+
+    verify_error_update: function() {
+        this.error_message_element.style.display = 'block';
+        this.error_message_element.innerHTML = error_verify_failure;
     }
 }

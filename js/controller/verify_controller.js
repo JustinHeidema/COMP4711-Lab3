@@ -43,7 +43,7 @@ Controller.prototype = {
                     m.verify();
                 },
                 function verifyError(err) {
-                    // document.getElementById("verify_error_message").style.display = "block";
+                    m.verify_error();
                 }
             );
         }

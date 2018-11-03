@@ -15,14 +15,17 @@ var Controller = function(model, view, authToken) {
 
 Controller.prototype = {
 
+    // Setup handlers
     setup_handlers: function() {
-        this.register_handler = this.handleRegister.bind(this);
+        this.register_handler = this.handle_register.bind(this);
     },
 
+    // Configure listeners
     enable: function() {
         this.view.register_event.add_listener(this.register_handler);
     },
 
+    // Register user with cognito
     register: function (email, password, onSuccess, onFailure) {
         let dataEmail = {
             Name: 'email',
@@ -42,13 +45,13 @@ Controller.prototype = {
         );
     },
 
-    handleRegister: function (sender, args) {
+    handle_register: function (sender, args) {
         let m = this.model;
-        let onSuccess = function registerSuccess(result) {
+        let on_success = function register_success(result) {
             let cognitoUser = result.user;
             m.register();
         };
-        let onFailure = function registerFailure(err) {
+        let on_failure = function register_failure(err) {
             m.failure();
         };
 
@@ -58,7 +61,7 @@ Controller.prototype = {
         else if (args.password !== args.password2) {
             m.passwords_do_not_match_error();
         } else {
-            this.register(args.email, args.password, onSuccess, onFailure);
+            this.register(args.email, args.password, on_success, on_failure);
         }
     }
 }

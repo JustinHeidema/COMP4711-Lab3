@@ -7,15 +7,17 @@ var Model = function() {
 
 Model.prototype = {
 
-    
+    // Notify view of verify action
     verify: function() {
         this.verify_event.notify();
     },
 
+    // Notify view with error message
     missing_info_error: function() {
         this.missing_info_error_event.notify();
     },
 
+    // Notify view with error message
     verify_error: function() {
         this.verify_error_event.notify();
     }

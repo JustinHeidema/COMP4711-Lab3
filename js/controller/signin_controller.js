@@ -15,39 +15,45 @@ var Controller = function(model, view, authToken) {
 
 Controller.prototype = {
 
+    // Setup handlers
     setup_handlers: function() {
-        this.signin_handler = this.handleSignin.bind(this);
+        this.signin_handler = this.handle_sign_in.bind(this);
     },
 
+    // Configure listeners
     enable: function() {
         this.view.signin_event.add_listener(this.signin_handler);
     },
 
+    // Sign user in to cognito
     signin: function(email, password, onSuccess, onFailure) {
         let authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
             Username: email,
             Password: password
         });
 
-        let cognitoUser = this.createCognitoUser(email);
+        let cognitoUser = this.create_cognito_user(email);
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: onSuccess,
             onFailure: onFailure
         });
     },
 
-    handleSignin: function(sender, args) {
+    // Handle sign in
+    handle_sign_in: function(sender, args) {
         let mainUrl = this.mainUrl;
         this.signin(args.email, args.password,
-            function signinSuccess() {
+            function signin_success() {
                 window.location.href = mainUrl;
             },
-            function signinError(err) {
+            function signin_error(err) {
                 document.getElementById("signin_error_message").style.display = "block";
             }
         );
     },
-    createCognitoUser: function(email) {
+
+    // Create cognito user
+    create_cognito_user: function(email) {
         return new AmazonCognitoIdentity.CognitoUser({
             Username: email,
             Pool: this.userPool

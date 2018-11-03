@@ -15,16 +15,20 @@ var Controller = function(model, view, authToken) {
 }
 
 Controller.prototype = {
+
+    // Setup handlers
     setup_handlers: function() {
         this.verify_handler = this.handleVerify.bind(this);
     },
 
+    // Configure listeners
     enable: function() {
         this.view.verify_event.add_listener(this.verify_handler);
     },
 
+    // Verify user with cognito
     verify: function(email, code, onSuccess, onFailure) {
-        this.createCognitoUser(email).confirmRegistration(code, true, function confirmCallback(err, result) {
+        this.create_cognito_user(email).confirmRegistration(code, true, function confirmCallback(err, result) {
             if (!err) {
                 onSuccess(result);
             } else {
@@ -33,6 +37,7 @@ Controller.prototype = {
         });
     },
 
+    // Handle verification
     handleVerify: function(sender, args) {
         let m = this.model;
         if (args.email == "" || args.code == "") {
@@ -50,7 +55,7 @@ Controller.prototype = {
 
     },
 
-    createCognitoUser: function(email) {
+    create_cognito_user: function(email) {
         return new AmazonCognitoIdentity.CognitoUser({
             Username: email,
             Pool: this.userPool

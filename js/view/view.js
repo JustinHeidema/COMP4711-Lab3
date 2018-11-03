@@ -38,6 +38,11 @@ var View = function(model) {
     this.headCenterY = this.canvasHeightCenter - 40;
     this.headRadius = 28;
 
+    this.leftEyeCenterX = this.headCenterX - 11;
+    this.rightEyeCenterX = this.headCenterX + 11;
+    this.bothEyeCenterY = this.headCenterY - 7;
+    this.eyeRadius = 2;
+
     this.gallows_1 = {
         start_x: this.headCenterX,
         start_y: this.headCenterY - 20,
@@ -93,6 +98,7 @@ var View = function(model) {
         end_x: this.hman_body.end_x - 25,
         end_y: this.hman_body.end_y + 40
     }
+
     this.setup_handlers();
     this.enable();
 }
@@ -198,6 +204,7 @@ View.prototype = {
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
         this.generate_leader_board();
+        this.draw_gallows();
     },
 
     generate_leader_board: function() {
@@ -219,6 +226,7 @@ View.prototype = {
     },
 
     draw_gallows: function() {
+        this.canvas_context.lineWidth = 4;
         // Gallows 1
         this.draw_line(this.canvas_context, 
             this.gallows_1.start_x, 
@@ -242,12 +250,9 @@ View.prototype = {
     },
 
     add_body_part: function(sender, args) {
+        this.canvas_context.lineWidth = 2;
         switch(args.guesses_remaining) {
             case 6:
-                this.draw_gallows();
-                break;
-
-            case 5:
                 // Head
                 this.canvas_context.beginPath();
                 this.canvas_context.arc(this.headCenterX,this.headCenterY, this.headRadius, 0, 2 * Math.PI);
@@ -256,6 +261,20 @@ View.prototype = {
                 this.canvas_context.fillStyle = 'white';
                 this.canvas_context.fill();
                 this.canvas_context.closePath();
+                break;
+
+            case 5:
+                // Eyes
+                this.canvas_context.beginPath();
+                this.canvas_context.arc(this.leftEyeCenterX,this.bothEyeCenterY, this.eyeRadius, 0, 2 * Math.PI);
+                this.canvas_context.arc(this.rightEyeCenterX,this.bothEyeCenterY, this.eyeRadius, 0, 2 * Math.PI);
+                this.canvas_context.fillStyle = 'black';
+                this.canvas_context.fill();
+                // Mouth
+                this.canvas_context.beginPath();
+                this.canvas_context.moveTo(this.headCenterX - 12, this.headCenterY + 12);
+                this.canvas_context.lineTo(this.headCenterX + 12, this.headCenterY + 12);
+                this.canvas_context.stroke();
                 break;
 
             case 4:
@@ -360,6 +379,7 @@ View.prototype = {
         this.modify_save_score_button(this.save_score_handler, "btn btn-success", save_score_button_message);
         this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
         this.generate_leaderboard_update();
+        this.draw_gallows();
     },
 
     modify_save_score_button: function(handle, className, message) {

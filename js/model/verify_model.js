@@ -16,7 +16,6 @@ Model.prototype = {
     },
 
     verify_error: function() {
-        console.log(error_verify_failure);
         this.verify_error_event.notify();
     }
 }

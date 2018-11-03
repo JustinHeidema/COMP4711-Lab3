@@ -418,14 +418,13 @@ View.prototype = {
             UserPoolId: _config.cognito.userPoolId,
             ClientId: _config.cognito.userPoolClientId
         };
-
-        console.log(poolData);
     
         let userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
         userPool.getCurrentUser().signOut();
         window.location.href= "index.html";
     },
 
+    // Display win or loss message at end of game
     display_victory_message: function (victory_message) {
         modal.style.display = "block";
         this.victory_message_element.textContent = victory_message;

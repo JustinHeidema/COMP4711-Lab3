@@ -29,7 +29,6 @@ Controller.prototype = {
             Value: email
         };
 
-        console.log(dataEmail);
         let attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
 
         this.userPool.signUp(email, password, [attributeEmail], null,
@@ -50,24 +49,19 @@ Controller.prototype = {
             let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
             if (confirmation) {
                 m.register();
-                // window.location.href = "verify.html";
             }
         };
         let onFailure = function registerFailure(err) {
-            // document.getElementById("user_error_message").style.display = "block";
+            m.failure();
         };
-
-        console.log(args);
 
         if (args.password == '' || args.password2 == '' || args.email == '') {
             m.missing_info_error();
         }
         else if (args.password !== args.password2) {
             m.passwords_do_not_match_error();
-            // document.getElementById("password_error_message").style.display = "none";
         } else {
             this.register(args.email, args.password, onSuccess, onFailure);
-            // document.getElementById("password_error_message").style.display = "block";
         }
     }
 }

@@ -17,12 +17,14 @@ View.prototype = {
         this.register_update_handler = this.register_update.bind(this);
         this.missing_info_error_update_handler = this.missing_info_error_update.bind(this);
         this.passwords_do_not_match_error_update_handler = this.passwords_do_not_match_error_update.bind(this);
+        this.failure_update_handler = this.failure_update.bind(this);
     },
 
     enable: function() {
         this.model.register_event.add_listener(this.register_update_handler);
         this.model.missing_info_error_event.add_listener(this.missing_info_error_update_handler);
         this.model.passwords_do_not_match_event.add_listener(this.passwords_do_not_match_error_update_handler);
+        this.model.failure_event.add_listener(this.failure_update_handler);
     },
 
     register: function() {
@@ -58,5 +60,10 @@ View.prototype = {
     passwords_do_not_match_error_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_passwords_do_not_match;
+    },
+    
+    failure_update: function() {
+        this.error_message_element.style.display = 'block';
+        this.error_message_element.innerHTML = error_register_failure;
     }
 }

@@ -7,3 +7,4 @@ const score_saved_button_message = "Score Saved!";
 
 const error_missing_info = "Please fill in all fields";
 const error_passwords_do_not_match = "Passwords do not match";
+const error_register_failure = "Failed to create user"

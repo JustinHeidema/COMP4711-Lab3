@@ -12,6 +12,7 @@ var View = function(model) {
 
 View.prototype = {
 
+    // Sets up handlers
     setup_handlers() {
         this.register_handler = this.register.bind(this);
         this.register_update_handler = this.register_update.bind(this);
@@ -20,6 +21,7 @@ View.prototype = {
         this.failure_update_handler = this.failure_update.bind(this);
     },
 
+    // Configures listeners
     enable: function() {
         this.model.register_event.add_listener(this.register_update_handler);
         this.model.missing_info_error_event.add_listener(this.missing_info_error_update_handler);
@@ -27,6 +29,7 @@ View.prototype = {
         this.model.failure_event.add_listener(this.failure_update_handler);
     },
 
+    // Accepts input from user and registers user
     register: function() {
         let email = document.getElementById("emailInputRegister").value;
         let password = document.getElementById("passwordInputRegister").value;
@@ -38,10 +41,12 @@ View.prototype = {
         });
     },
 
+    // Updates UI based on register action
     register_update: function() {
         this.modal_element.style.display = 'block';
     },
 
+    // Initial rendering of page
     render: function() {
         this.register_button_element.onclick = this.register_handler;
         this.register_button_element.addEventListener("click", function(event){
@@ -52,16 +57,19 @@ View.prototype = {
         }
     },
 
+    // Displays error message
     missing_info_error_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_missing_info;
     },
 
+    // Displays error message
     passwords_do_not_match_error_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_passwords_do_not_match;
     },
     
+    // Displays error message
     failure_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_register_failure;

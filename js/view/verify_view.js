@@ -12,6 +12,7 @@ var View = function(model) {
 
 View.prototype = {
 
+    // Sets up handlers for various functions
     setup_handlers: function() {
         this.verify_handler = this.verify.bind(this);
         this.verify_update_handler = this.verify_update.bind(this);
@@ -19,12 +20,14 @@ View.prototype = {
         this.verify_error_update_handler = this.verify_error_update.bind(this);
     },
 
+    // Configure listeners
     enable: function() {
         this.model.verify_event.add_listener(this.verify_update_handler);
         this.model.missing_info_error_event.add_listener(this.missing_info_error_update_handler);
         this.model.verify_error_event.add_listener(this.verify_error_update_handler);
     },
 
+    // Accepts input from user to verify
     verify: function() {
         let email = document.getElementById("emailInputVerify").value;
         let code = document.getElementById("codeInputVerify").value;
@@ -35,10 +38,12 @@ View.prototype = {
         });
     },
 
+    // Updates UI based on verify action
     verify_update: function() {
         this.modal_element.style.display = 'block';
     },
 
+    // Initial rendering of page
     render: function() {
         this.verify_button_element.addEventListener("click", function(event){
             event.preventDefault()
@@ -48,11 +53,14 @@ View.prototype = {
             window.location.href = "index.html";
         }
     },
+
+    // Display error message
     missing_info_error_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_missing_info;
     },
 
+    // Display error message
     verify_error_update: function() {
         this.error_message_element.style.display = 'block';
         this.error_message_element.innerHTML = error_verify_failure;

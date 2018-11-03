@@ -22,6 +22,7 @@ button:not(#signin_button):not(#verify_button):not(#ok_button):not(#register_but
     text-align: center;
     overflow: hidden;
 }
+
 #leaderboard_container > h1 {
     margin-top: 1px;
     padding-bottom: 10px;

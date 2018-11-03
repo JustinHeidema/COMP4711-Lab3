@@ -46,10 +46,7 @@ Controller.prototype = {
         let m = this.model;
         let onSuccess = function registerSuccess(result) {
             let cognitoUser = result.user;
-            let confirmation = ('Registration successful. Please check your email inbox or spam folder for your verification code.');
-            if (confirmation) {
-                m.register();
-            }
+            m.register();
         };
         let onFailure = function registerFailure(err) {
             m.failure();

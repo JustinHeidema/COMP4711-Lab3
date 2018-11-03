@@ -1,6 +1,5 @@
 const lexicographic_offset = 97;
 
-
 var View = function(model) {
     this.model = model;
     this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"

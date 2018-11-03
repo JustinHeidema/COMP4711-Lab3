@@ -11,15 +11,18 @@ var View = function(model) {
 
 View.prototype = {
 
+    // Sets up handlers for several functions
     setup_handlers() {
         this.signin_handler = this.signin.bind(this);
         this.signin_update_handler = this.signin_update.bind(this);
     },
 
+    // Configure listeners
     enable: function() {
         this.model.signin_event.add_listener(this.signin_update_handler);
     },
 
+    // Accepts user input and logs the user in
     signin: function() {
         let email = document.getElementById("emailInputSignin").value;
         let password = document.getElementById("passwordInputSignin").value;
@@ -29,10 +32,13 @@ View.prototype = {
         });
     },
 
+    // Updates UI based on signin action
     signin_update: function() {
         this.modal_element.style.display = 'block';
     },
 
+
+    // Initial rendering of page
     render: function() {
         this.signin_button_element.addEventListener("click", function(event){
             event.preventDefault()

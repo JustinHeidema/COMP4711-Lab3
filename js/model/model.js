@@ -145,12 +145,12 @@ var Model = function(authToken) {
     ]
     this.words = [
         {
-            word: "octopus",
-            definition: "An eight legged ocean creature"
+            word: "awkward",
+            definition: "causing difficulty; hard to do or deal with"
         },
         {
             word: "renaissance",
-            definition: "The revival of European art and literature under the influence of classical models in the 14th–16th centuries."
+            definition: "The revival of European art and literature under the influence of classical models in the 14th to 16th centuries."
         },
         {
             word: "pioneer",
@@ -183,6 +183,22 @@ var Model = function(authToken) {
         {
             word: "ecstatic",
             definition: "Feeling or expressing overwhelming happiness or joyful excitement"
+        },
+        {
+            word: "crypt",
+            definition: "a stone chamber beneath the floor of a church or other building"
+        },
+        {
+            word: "fervid",
+            definition: "intensely enthusiastic or passionate, especially to an excessive degree"
+        },
+        {
+            word: "dwarf",
+            definition: "a member of a mythical race of short, stocky humanlike creatures who are generally skilled in mining and metalworking"
+        },
+        {
+            word: "mystify",
+            definition: "utterly bewilder or perplex"
         }
     ];
     this.leaderboard_list = [];

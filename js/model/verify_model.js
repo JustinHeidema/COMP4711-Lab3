@@ -6,8 +6,9 @@ var Model = function() {
 
 
 Model.prototype = {
+
+    
     verify: function() {
-        console.log("model verify");
         this.verify_event.notify();
     },
 

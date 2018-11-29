@@ -430,7 +430,6 @@ View.prototype = {
     },     
     
     badgebook_logout: function() {
-        console.log("LOGOUT CLICKED")
         badgeBookTokenHandler.clearAccessToken();
     }
 }

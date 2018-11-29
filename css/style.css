@@ -13,6 +13,10 @@ button:not(#logout_with_badgebook_button):not(#login_with_badgebook_button):not(
     margin: 1px;
 }
 
+#login_with_badgebook_button {
+    font-size: x-large;
+}
+
 #logout_button_div {
     margin-top: 50px;
     padding: 10px;

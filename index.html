@@ -28,6 +28,8 @@
                         <button type="submit" id="signin_button" class="btn btn-info">Log in</button>
                         <a href="register.html" class="btn btn-info">Sign Up</a>
                     </form>
+                    <button id="login_with_badgebook_button" class="btn btn-danger">Login with Badgebook</button>
+                    <button id="logout_with_badgebook_button" class="btn btn-danger">Logout with Badgebook</button>
                     <div>
                     </div>
                 </div>
@@ -36,10 +38,21 @@
         <script src="js/strings.js"></script>
         <script src="js/event_dispatcher.js"></script>
         <script src="js/auth/config.js"></script>
+        <script src="js/auth/token-handler.js"></script>
         <script src="js/model/signin_model.js"></script>
         <script src="js/view/signin_view.js"></script>
         <script src="js/controller/signin_controller.js"></script>
         <script src="js/register_app.js"></script>
         <script src="js/auth/amazon-cognito-identity.min.js"></script>
+        <!-- <script>
+            let login_with_badgebook_button_element = document.getElementById("login_with_badgebook_button");
+            console.log(login_with_badgebook_button_element);
+
+            function handleClickLogin() {
+                badgeBookTokenHandler.loginWithBadgeBook();
+            }
+
+            login_with_badgebook_button_element.onclick = handleClickLogin;
+        </script> -->
     </body>
 </html>

@@ -24,13 +24,18 @@ $(function () {
 
     authToken.then(function setAuthToken(token) {
         if (token) {
+            console.log(token);
             authToken = token;
             let model = new Model(authToken),
             view = new View(model, authToken);
             controller = new Controller(model, view, authToken);
             view.render();
         } else {
-            window.location.href = 'index.html';
+            let model = new Model(authToken),
+            view = new View(model, authToken);
+            controller = new Controller(model, view, authToken);
+            view.render();
+            // window.location.href = 'index.html';
         }
     }).catch(function handleTokenError(error) {
         

@@ -199,7 +199,7 @@ View.prototype = {
             this.alphabet_element.appendChild(btn);
         }
 
-        this.logout_button.onclick = this.signout_button;
+        this.logout_button.onclick = this.badgebook_logout;
         this.replay_button_element.onclick = this.replay_button_handler;
         this.save_score_button_element.onclick = this.save_score_handler;
         this.generate_leader_board();
@@ -427,5 +427,10 @@ View.prototype = {
     display_victory_message: function (victory_message) {
         modal.style.display = "block";
         this.victory_message_element.textContent = victory_message;
+    },     
+    
+    badgebook_logout: function() {
+        console.log("LOGOUT CLICKED")
+        badgeBookTokenHandler.clearAccessToken();
     }
 }

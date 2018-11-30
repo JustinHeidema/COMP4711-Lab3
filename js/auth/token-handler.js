@@ -38,6 +38,7 @@ function createBadgeBookTokenHandler() {
     function handleValidToken(claims) {
         console.log(`User has a valid token`);
         console.log(window.location.pathname);
+        console.log(claims.name);
         if (window.location.pathname == "/") {
             window.location.href = "main.html";
         } else {

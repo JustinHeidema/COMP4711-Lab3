@@ -1,5 +1,6 @@
-var Model = function(authToken) {
-    this.token = authToken;
+var Model = function(claims, token) {
+    this.token = token;
+    this.claims = claims;
     this.guess_letter_event = new Event(this);
     this.set_word_event = new Event(this);
     this.game_over_event = new Event(this);
@@ -10,7 +11,7 @@ var Model = function(authToken) {
     this.guesses_remaining_event = new Event(this);
     this.save_score_event = new Event(this);
     this.generate_leaderboard_event = new Event(this);
-    this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"
+    this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/prod/api"
     this.alphabet = [
         {
             letter: 'a',
@@ -282,7 +283,7 @@ Model.prototype = {
     },
 
     save_score: function() {
-        save(this.token, this.endpoint, this.score, this.save_score_event);
+        save(this.token, this.endpoint, this.score, this.claims, this.token, this.save_score_event);
     },
 
     // Resets data for a new game, and notifies the view of update
@@ -353,12 +354,19 @@ Model.prototype = {
     }
 }
 
-function save(auth, url, score, event) {
+function save(auth, url, score, claims, token, event) {
+    console.log(claims);
     let xhttp = new XMLHttpRequest();
     xhttp.open("POST", url,  true);
     xhttp.setRequestHeader("Authorization", auth);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify({"score": score}));
+    xhttp.send(JSON.stringify(
+        {
+            "score": score,
+            "claims": claims,
+            "token": token
+        }
+    ));
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             event.notify();

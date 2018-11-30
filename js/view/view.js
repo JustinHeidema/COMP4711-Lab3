@@ -2,7 +2,7 @@ const lexicographic_offset = 97;
 
 var View = function(model) {
     this.model = model;
-    this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/dev/api"
+    this.endpoint = "https://obbzuk8g48.execute-api.us-west-2.amazonaws.com/prod/api"
 
     this.guess_letter_event = new Event(this);
     this.replay_event = new Event(this);
@@ -370,7 +370,7 @@ View.prototype = {
 
     // Updates button to indicate score was saved
     save_score_update: function() {
-        this.modify_save_score_button('', "btn btn-info", score_saved_button_message);
+        // this.modify_save_score_button('', "btn btn-info", score_saved_button_message);
         this.update_leaderboard_event.notify();
     },
 
